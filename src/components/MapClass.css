@@ -1,0 +1,42 @@
+.leaflet-container {
+  background-color: white !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.mapMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttons {
+  min-width: 100px;
+  margin-top: 5px;
+}
+
+.aside {
+  background-color: lightslategrey;
+  min-width: 150px;
+  height: 90vh;
+  border: 2px solid black;
+  margin: 2px 2px 2px 2px;
+}
+
+.map {
+  background-color: grey;
+  border: 2px solid purple;
+  margin: 2px 2px 2px 2px;
+  width: 100%;
+}
+
+.map__container {
+  width: 100%;
+  background-color: green;
+  vector-effect: non-scaling-stroke;
+}
+
+/*# sourceMappingURL=MapClass.css.map */
