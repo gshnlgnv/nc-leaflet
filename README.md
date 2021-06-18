@@ -1,5 +1,5 @@
-###Sandbox for testing Leaflet library
-_________________
+##Sandbox for testing Leaflet library
+
 
 <img src="https://a.radikal.ru/a06/2106/70/d1903156ca3b.jpg" alt="netcube-app" width="400"/>
 

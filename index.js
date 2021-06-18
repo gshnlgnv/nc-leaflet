@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from './src/App.js';
 import {combineReducers, createStore} from "redux";
 import {Provider} from "react-redux";
-import {dataReducer} from './src/components/dataReducer';
+import {dataReducer} from './src/store/dataReducer';
 
 const rootReducer = combineReducers({dataReducer: dataReducer})
 

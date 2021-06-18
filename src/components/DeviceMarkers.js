@@ -2,36 +2,35 @@ import React, {Fragment} from 'react';
 import {Marker, Popup} from "react-leaflet";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {deleteMarker} from './actions';
+import {deleteMarker} from '../store/actions';
 
 class DeviceMarkers extends React.Component {
     mapDeviceMarkers() {
-        const {deviceMarkers} = this.props;
+        const {deviceMarkers, currentLayer} = this.props;
 
         return Object.entries(deviceMarkers).map(([id, deviceInfo]) => {
-            return <Marker
-                key={deviceInfo.key}
-                position={deviceInfo.position}
-                icon={deviceInfo.icon}
-                draggable={deviceInfo.draggable}
-                autoPan={deviceInfo.autoPan}
-            >
-                <Popup>
-                    {deviceInfo.content}
-                    <button title="edit" onClick={() => console.log('edit')}>edit</button>
-                    <button title="delete" onClick={() => {
-                        console.log('delete')
-                        this.props.deleteMarker(deviceInfo.key)
-                    } }>x</button>
-                </Popup>
-            </Marker>
+             if (deviceInfo.floor === currentLayer) {
+                 return <Marker
+                     key={deviceInfo.key}
+                     position={deviceInfo.position}
+                     icon={deviceInfo.icon}
+                     draggable={deviceInfo.draggable}
+                     autoPan={deviceInfo.autoPan}
+                 >
+                     <Popup>
+                         {deviceInfo.content}
+                         <button title="edit" onClick={() => console.log('edit')}>edit</button>
+                         <button title="delete" onClick={() => {
+                             console.log('delete')
+                             this.props.deleteMarker(deviceInfo.key)
+                         } }>x</button>
+                     </Popup>
+                 </Marker>
+             }
         });
     }
 
     render() {
-
-        console.log("deviceMarkers", this.props.deviceMarkers);
-
         return (
             <Fragment>
                 {this.mapDeviceMarkers()}
@@ -43,6 +42,7 @@ class DeviceMarkers extends React.Component {
 const mapStateToProps = (state) => {
     return {
         deviceMarkers: state.dataReducer.deviceMarkers,
+        currentLayer: state.dataReducer.currentLayer,
     }
 };
 

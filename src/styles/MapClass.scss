@@ -39,4 +39,10 @@
   vector-effect: non-scaling-stroke;
 }
 
-/*# sourceMappingURL=MapClass.css.map */
+.noMap {
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}

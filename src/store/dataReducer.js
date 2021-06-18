@@ -1,4 +1,5 @@
-import {ADD_DEVICE_MARKER, DELETE_DEVICE_MARKER, ADD_POLYGON_LAYER} from './consts';
+import {ADD_DEVICE_MARKER, DELETE_DEVICE_MARKER, ADD_POLYGON_LAYER, CHECKING_LAYER} from './consts';
+import {kabinets, markers} from "./polygons";
 
 const customMarker = new L.icon({
     iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
@@ -8,34 +9,9 @@ const customMarker = new L.icon({
 });
 
 const initialState = {
-    deviceMarkers: [
-        // {
-        //     key: 'marker1',
-        //     position: [59.927, 30.3086],
-        //     content: 'device 123',
-        //     draggable: true,
-        //     autoPan: true,
-        //     icon: customMarker,
-        //     title: '123',
-        // },
-        // {
-        //     key: 'marker2',
-        //     position: [59.9370, 30.3086],
-        //     content: 'device 123',
-        //     draggable: true,
-        //     autoPan: true,
-        //     icon: customMarker
-        // },
-        // {
-        //     key: 'marker3',
-        //     position: [59.9475, 30.3086111],
-        //     content: 'device 123',
-        //     draggable: true,
-        //     autoPan: true,
-        //     icon: customMarker
-        // }
-    ],
-    polygonLayers: [],
+    deviceMarkers: markers,
+    polygonLayers: kabinets,
+    currentLayer: null,
 }
 
 export const dataReducer = (state = initialState, action) => {
@@ -43,14 +19,16 @@ export const dataReducer = (state = initialState, action) => {
         case ADD_DEVICE_MARKER:
             return {
                 ...state,
-                deviceMarkers: state.deviceMarkers.concat({
+                deviceMarkers: state.deviceMarkers.concat(
+                    {
                     key: 'marker4',
                     position: [59.9575, 30.3086111],
                     content: action.payload,
                     draggable: true,
                     autoPan: true,
                     icon: customMarker
-                })
+                }
+                )
             }
         case DELETE_DEVICE_MARKER:
             return {
@@ -62,7 +40,12 @@ export const dataReducer = (state = initialState, action) => {
                 ...state,
                 polygonLayers: state.polygonLayers.concat(action.payload),
             }
+        case CHECKING_LAYER:
+            return {
+                ...state,
+                currentLayer: action.payload,
+            }
         default:
             return state;
     }
-}
+};
