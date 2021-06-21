@@ -1,5 +1,5 @@
 import React from 'react';
-import {MapContainer, FeatureGroup, ImageOverlay, Polygon, Popup} from 'react-leaflet';
+import {MapContainer, FeatureGroup, ImageOverlay, Polygon, Popup, useMapEvent} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -11,6 +11,7 @@ import {addDeviceMarker, addPolygonLayer, layerTypeChecking} from '../store/acti
 import deviceIcon from '../pics/microchip.png';
 import svg1 from '../pics/floorplan.svg';
 import svg2 from '../pics/floorplan-1.svg';
+import medcentrLogo from '../pics/unnamed.jpg';
 
 class MapClass extends React.Component {
     render() {
@@ -49,14 +50,55 @@ class MapClass extends React.Component {
         }
 
         const drawingPolygonsFromState = () => {
-            const purpleOptions = {color: 'purple'};
+            const purpleOptions = {color: 'red'};
             const {polygonLayers, currentLayer} = this.props;
 
             return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
 
                 if (floor === currentLayer) {
                     return (
-                        <Polygon key={index} pathOptions={purpleOptions} positions={polygons}>
+                        <Polygon
+                            key={index}
+                            pathOptions={purpleOptions}
+                            positions={polygons}
+
+
+
+                            // ?????????????????????????????????????
+                            // https://react-leaflet.js.org/docs/example-tooltips
+                            eventHandlers={()=> console.log('asd')}
+                        >
+                                <Popup>
+                                    {name} <br/> Easily customizable.
+                                </Popup>
+                            </Polygon>
+                    )
+                }
+            });
+        }
+
+
+
+        const DrawingPolygonsFromState = () => {
+            const purpleOptions = {color: 'red'};
+            const {polygonLayers, currentLayer} = this.props;
+
+            const eventHandlers = () => {
+                return console.log('hi');
+            }
+
+            return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
+                if (floor === currentLayer) {
+                    return (
+                        <Polygon
+                            key={index}
+                            pathOptions={purpleOptions}
+                            positions={polygons}
+
+                            // ?????????????????????????????????????
+                            // https://react-leaflet.js.org/docs/example-tooltips
+                            // eventHandlers={eventHandlers}
+                        >
                             <Popup>
                                 {name} <br/> Easily customizable.
                             </Popup>
@@ -64,6 +106,11 @@ class MapClass extends React.Component {
                     )
                 }
             });
+        }
+
+
+        const eventHandlers = () => {
+            console.log('clicked on polyhon');
         }
 
 // actions on deleting layer
@@ -112,7 +159,7 @@ class MapClass extends React.Component {
             ];
 
             if (!currentLayer) {
-                return <div className='noMap'>select floor</div>
+                return <div className='noMap'><img src={medcentrLogo} alt='logo'/></div>
             }
 
             return mapLayers.map( (layer, index) => {
@@ -131,49 +178,49 @@ class MapClass extends React.Component {
 
         return (
             <div className="container">
-                <div className='aside'>
-                    <select onChange={handleSelectChange}>
-                        <option value="1F">1 floor</option>
-                        <option value="2F">2 floor</option>
-                    </select>
-                </div>
                 <div className="map">
-                    <div className="map__container">
+                        <select onChange={handleSelectChange}>
+                            <option value="" selected disabled hidden>Выбрать этаж</option>
+                            <option value="1F">1 этаж</option>
+                            <option value="2F">2 этаж</option>
+                        </select>
                         <MapContainer
                             center={[50, 50]}
                             zoom={4}
-                            style={{height: "90vh", width: "100%"}}
+                            style={{height: "97vh", width: "100%"}}
                             scrollWheelZoom={true}
+                            zoomControl={false}
                         >
-                            <FeatureGroup>
-                                <EditControl
-                                    position='topright'
-                                    onEdited={_onEditPath}
-                                    onCreated={_onCreate}
-                                    onDeleted={_onDeleted}
-                                    onDrawStart={_onDrawStart}
-                                    draw={{
-                                        rectangle: false,
-                                        circlemarker: false,
-                                        circle: false,
-                                        polygon: {
-                                            shapeOptions: {
-                                                color: '#97009c',
-                                                opacity: 0.5,  // polygon border opacity
-                                            }
-                                        },
-                                        // marker: {
-                                        //     icon: deviceIcon123,
-                                        //     title: "device abc",
-                                        // }
-                                    }}
-                                />
-                            </FeatureGroup>
+
+                            {/*<FeatureGroup>*/}
+                            {/*    <EditControl*/}
+                            {/*        position='topright'*/}
+                            {/*        onEdited={_onEditPath}*/}
+                            {/*        onCreated={_onCreate}*/}
+                            {/*        onDeleted={_onDeleted}*/}
+                            {/*        onDrawStart={_onDrawStart}*/}
+                            {/*        draw={{*/}
+                            {/*            rectangle: false,*/}
+                            {/*            circlemarker: false,*/}
+                            {/*            circle: false,*/}
+                            {/*            polygon: {*/}
+                            {/*                shapeOptions: {*/}
+                            {/*                    color: '#97009c',*/}
+                            {/*                    opacity: 0.5,  // polygon border opacity*/}
+                            {/*                }*/}
+                            {/*            },*/}
+                            {/*            // marker: {*/}
+                            {/*            //     icon: deviceIcon123,*/}
+                            {/*            //     title: "device abc",*/}
+                            {/*            // }*/}
+                            {/*        }}*/}
+                            {/*    />*/}
+                            {/*</FeatureGroup>*/}
+
                             {drawLayers()}
                             <DeviceMarkers/>
-                            {drawingPolygonsFromState()}
+                            <DrawingPolygonsFromState/>
                         </MapContainer>
-                    </div>
                 </div>
             </div>
         )
