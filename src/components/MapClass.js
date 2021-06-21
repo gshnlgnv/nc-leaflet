@@ -12,12 +12,24 @@ import deviceIcon from '../pics/microchip.png';
 import svg1 from '../pics/floorplan.svg';
 import svg2 from '../pics/floorplan-1.svg';
 import medcentrLogo from '../pics/unnamed.jpg';
+import {PolygonComponent} from "./Polygon";
 
 class MapClass extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            count: 0
+        }
+    }
+
+
+
     render() {
         const handleSelectChange = (event) => {
             this.props.layerTypeChecking(event.target.value);
         }
+
+        console.log('state = ', this.state.count);
 
         L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
         L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию';
@@ -49,68 +61,33 @@ class MapClass extends React.Component {
             }
         }
 
-        const drawingPolygonsFromState = () => {
-            const purpleOptions = {color: 'red'};
-            const {polygonLayers, currentLayer} = this.props;
-
-            return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
-
-                if (floor === currentLayer) {
-                    return (
-                        <Polygon
-                            key={index}
-                            pathOptions={purpleOptions}
-                            positions={polygons}
-
-
-
-                            // ?????????????????????????????????????
-                            // https://react-leaflet.js.org/docs/example-tooltips
-                            eventHandlers={()=> console.log('asd')}
-                        >
-                                <Popup>
-                                    {name} <br/> Easily customizable.
-                                </Popup>
-                            </Polygon>
-                    )
-                }
-            });
-        }
-
-
-
         const DrawingPolygonsFromState = () => {
-            const purpleOptions = {color: 'red'};
+            // const purpleOptions = {color: 'red'};
             const {polygonLayers, currentLayer} = this.props;
-
-            const eventHandlers = () => {
-                return console.log('hi');
-            }
 
             return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
                 if (floor === currentLayer) {
-                    return (
-                        <Polygon
-                            key={index}
-                            pathOptions={purpleOptions}
-                            positions={polygons}
 
-                            // ?????????????????????????????????????
-                            // https://react-leaflet.js.org/docs/example-tooltips
-                            // eventHandlers={eventHandlers}
-                        >
-                            <Popup>
-                                {name} <br/> Easily customizable.
-                            </Popup>
-                        </Polygon>
+                    return (
+
+                        <PolygonComponent key={index} polygons={polygons} name={name}/>
+
+                        // <Polygon
+                        //     key={index}
+                        //     // pathOptions={purpleOptions}
+                        //     positions={polygons}
+                        //     color='green'
+                        //     // ?????????????????????????????????????
+                        //     // https://react-leaflet.js.org/docs/example-tooltips
+                        //     // eventHandlers={polygonHandler}
+                        // >
+                        //     <Popup>
+                        //         {name} <br/> Easily customizable.
+                        //     </Popup>
+                        // </Polygon>
                     )
                 }
             });
-        }
-
-
-        const eventHandlers = () => {
-            console.log('clicked on polyhon');
         }
 
 // actions on deleting layer
@@ -179,7 +156,7 @@ class MapClass extends React.Component {
         return (
             <div className="container">
                 <div className="map">
-                        <select onChange={handleSelectChange}>
+                        <select onChange={handleSelectChange} >
                             <option value="" selected disabled hidden>Выбрать этаж</option>
                             <option value="1F">1 этаж</option>
                             <option value="2F">2 этаж</option>
