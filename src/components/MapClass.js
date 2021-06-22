@@ -1,36 +1,30 @@
 import React from 'react';
-import {MapContainer, FeatureGroup, ImageOverlay, Polygon, Popup, useMapEvent} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-draw/dist/leaflet.draw.css';
+
+import {MapContainer, FeatureGroup, ImageOverlay} from 'react-leaflet';
+import {EditControl} from "react-leaflet-draw";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import 'leaflet-draw/dist/leaflet.draw.css';
-import {EditControl} from "react-leaflet-draw";
+
 import '../styles/MapClass.css';
 import DeviceMarkers from "./DeviceMarkers";
 import {addDeviceMarker, addPolygonLayer, layerTypeChecking} from '../store/actions';
 import deviceIcon from '../pics/microchip.png';
-import svg1 from '../pics/floorplan.svg';
-import svg2 from '../pics/floorplan-1.svg';
 import medcentrLogo from '../pics/unnamed.jpg';
 import {PolygonComponent} from "./Polygon";
+import {mapLayers} from '../store/polygons'
+
+import { HeatmapFunction } from './HeatLayer';
+import Drifting from './Drifting';
 
 class MapClass extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            count: 0
-        }
-    }
-
-
-
     render() {
         const handleSelectChange = (event) => {
             this.props.layerTypeChecking(event.target.value);
         }
 
-        console.log('state = ', this.state.count);
-
+        // names for standart leaflet buttons
         L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
         L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию';
         L.drawLocal.draw.toolbar.buttons.marker = 'Поставить маркер';
@@ -61,35 +55,6 @@ class MapClass extends React.Component {
             }
         }
 
-        const DrawingPolygonsFromState = () => {
-            // const purpleOptions = {color: 'red'};
-            const {polygonLayers, currentLayer} = this.props;
-
-            return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
-                if (floor === currentLayer) {
-
-                    return (
-
-                        <PolygonComponent key={index} polygons={polygons} name={name}/>
-
-                        // <Polygon
-                        //     key={index}
-                        //     // pathOptions={purpleOptions}
-                        //     positions={polygons}
-                        //     color='green'
-                        //     // ?????????????????????????????????????
-                        //     // https://react-leaflet.js.org/docs/example-tooltips
-                        //     // eventHandlers={polygonHandler}
-                        // >
-                        //     <Popup>
-                        //         {name} <br/> Easily customizable.
-                        //     </Popup>
-                        // </Polygon>
-                    )
-                }
-            });
-        }
-
 // actions on deleting layer
         const _onDeleted = (e) => {
             console.log("deleted");
@@ -117,87 +82,92 @@ class MapClass extends React.Component {
             return result;
         }
 
+        // drawing svg layers/floors of the building
         const drawLayers = () => {
             const {currentLayer} = this.props;
 
-            const mapLayers = [
-                {
-                    floor: '1F',
-                    attr: 'МедЦентр 1 этаж',
-                    url: svg1,
-                    bounds: [[0, 0], [60, 100],]
-                },
-                {
-                    floor: '2F',
-                    attr: 'МедЦентр 2 этаж',
-                    url: svg2,
-                    bounds: [[0, 0], [60, 100],]
-                }
-            ];
-
             if (!currentLayer) {
-                return <div className='noMap'><img src={medcentrLogo} alt='logo'/></div>
+                return <div className='noMap'><img style={{width: 150, height: 150}} src={medcentrLogo} alt='logo'/></div>
             }
 
-            return mapLayers.map( (layer, index) => {
+            return mapLayers.map((layer, index) => {
                 if (layer.floor === currentLayer) {
                     return (
-                            <ImageOverlay
-                                key={index}
-                                attribution={layer.attr}
-                                url={layer.url}
-                                bounds={layer.bounds}
-                            />
+                        <ImageOverlay
+                            key={index}
+                            attribution={layer.attr}
+                            url={layer.url}
+                            bounds={layer.bounds}
+                        />
                     )
                 }
             });
         }
 
+        // drawing polygons for particular floor
+        const DrawingPolygonsFromState = () => {
+            const {polygonLayers, currentLayer} = this.props;
+
+            return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
+                if (floor === currentLayer) {
+                    return <PolygonComponent key={index} polygons={polygons} name={name}/>
+                }
+            });
+        }
+
+        console.log('pol', this.props.polygonLayers);
+
         return (
             <div className="container">
                 <div className="map">
-                        <select onChange={handleSelectChange} >
-                            <option value="" selected disabled hidden>Выбрать этаж</option>
-                            <option value="1F">1 этаж</option>
-                            <option value="2F">2 этаж</option>
-                        </select>
-                        <MapContainer
-                            center={[50, 50]}
-                            zoom={4}
-                            style={{height: "97vh", width: "100%"}}
-                            scrollWheelZoom={true}
-                            zoomControl={false}
-                        >
 
-                            {/*<FeatureGroup>*/}
-                            {/*    <EditControl*/}
-                            {/*        position='topright'*/}
-                            {/*        onEdited={_onEditPath}*/}
-                            {/*        onCreated={_onCreate}*/}
-                            {/*        onDeleted={_onDeleted}*/}
-                            {/*        onDrawStart={_onDrawStart}*/}
-                            {/*        draw={{*/}
-                            {/*            rectangle: false,*/}
-                            {/*            circlemarker: false,*/}
-                            {/*            circle: false,*/}
-                            {/*            polygon: {*/}
-                            {/*                shapeOptions: {*/}
-                            {/*                    color: '#97009c',*/}
-                            {/*                    opacity: 0.5,  // polygon border opacity*/}
-                            {/*                }*/}
-                            {/*            },*/}
-                            {/*            // marker: {*/}
-                            {/*            //     icon: deviceIcon123,*/}
-                            {/*            //     title: "device abc",*/}
-                            {/*            // }*/}
-                            {/*        }}*/}
-                            {/*    />*/}
-                            {/*</FeatureGroup>*/}
+                    <select onChange={handleSelectChange}>
+                        <option value="" selected disabled hidden>Выбрать этаж</option>
+                        <option value="1F">1 этаж</option>
+                        <option value="2F">2 этаж</option>
+                        <option value="3F">3 этаж</option>
+                    </select>
 
-                            {drawLayers()}
-                            <DeviceMarkers/>
-                            <DrawingPolygonsFromState/>
-                        </MapContainer>
+                    <MapContainer
+                        center={[35, 50]}
+                        zoom={5}
+                        style={{height: "97vh", width: "100%"}}
+                        scrollWheelZoom={true}
+                        zoomControl={false}
+                    >
+
+                       <HeatmapFunction />
+                        <Drifting />
+
+                       <FeatureGroup>
+                            <EditControl
+                                position='topright'
+                                onEdited={_onEditPath}
+                                onCreated={_onCreate}
+                                onDeleted={_onDeleted}
+                                onDrawStart={_onDrawStart}
+                                draw={{
+                                    rectangle: false,
+                                    circlemarker: false,
+                                    circle: false,
+                                    polygon: {
+                                        shapeOptions: {
+                                            color: '#97009c',
+                                            opacity: 0.5,  // polygon border opacity
+                                        }
+                                    },
+                                    // marker: {
+                                    //     icon: deviceIcon123,
+                                    //     title: "device abc",
+                                    // }
+                                }}
+                            />
+                        </FeatureGroup>
+
+                        {drawLayers()}
+                        <DeviceMarkers/>
+                        <DrawingPolygonsFromState/>
+                    </MapContainer>
                 </div>
             </div>
         )

@@ -10,25 +10,18 @@ module.exports = {
     },
     module: {
         rules: [
-            // {
-            //     test: /\.json$/,
-            //     loader: 'json-loader'
-            // },
             {
                 test: /\.svg$/i,
                 use: [
                     {
                         loader: 'url-loader',
-                        // options: {
-                        //     generator: (content) => svgToMiniDataURI(content.toString()),
-                        // },
                     },
                 ],
             },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use: ["babel-loader"]
+                use: ["babel-loader"],
             },
             {
                 test: /\.css$/,

@@ -16,8 +16,6 @@ export const PolygonComponent = ({polygons, name}) => {
         [],
     )
 
-    console.log('color : ', currentColor);
-
     return (
         <Polygon
             pathOptions={currentColor}
