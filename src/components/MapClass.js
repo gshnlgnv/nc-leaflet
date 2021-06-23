@@ -9,21 +9,18 @@ import {connect} from 'react-redux';
 
 import '../styles/MapClass.css';
 import DeviceMarkers from "./DeviceMarkers";
-import {addDeviceMarker, addPolygonLayer, layerTypeChecking} from '../store/actions';
+import {addDeviceMarker, addPolygonLayer} from '../store/actions';
 import deviceIcon from '../pics/microchip.png';
 import medcentrLogo from '../pics/unnamed.jpg';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
 
-import { HeatmapFunction } from './HeatLayer';
+import {HeatmapFunction} from './HeatLayer';
 import Drifting from './Drifting';
+import MenuTop from "./MenuTop";
 
 class MapClass extends React.Component {
     render() {
-        const handleSelectChange = (event) => {
-            this.props.layerTypeChecking(event.target.value);
-        }
-
         // names for standart leaflet buttons
         L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
         L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию';
@@ -87,7 +84,8 @@ class MapClass extends React.Component {
             const {currentLayer} = this.props;
 
             if (!currentLayer) {
-                return <div className='noMap'><img style={{width: 150, height: 150}} src={medcentrLogo} alt='logo'/></div>
+                return <div className='noMap'><img style={{width: 150, height: 150}} src={medcentrLogo} alt='logo'/>
+                </div>
             }
 
             return mapLayers.map((layer, index) => {
@@ -121,12 +119,7 @@ class MapClass extends React.Component {
             <div className="container">
                 <div className="map">
 
-                    <select onChange={handleSelectChange}>
-                        <option value="" selected disabled hidden>Выбрать этаж</option>
-                        <option value="1F">1 этаж</option>
-                        <option value="2F">2 этаж</option>
-                        <option value="3F">3 этаж</option>
-                    </select>
+                    <MenuTop/>
 
                     <MapContainer
                         center={[35, 50]}
@@ -136,10 +129,10 @@ class MapClass extends React.Component {
                         zoomControl={false}
                     >
 
-                       <HeatmapFunction />
-                        <Drifting />
+                        <HeatmapFunction/>
+                        <Drifting/>
 
-                       <FeatureGroup>
+                        <FeatureGroup>
                             <EditControl
                                 position='topright'
                                 onEdited={_onEditPath}
@@ -183,7 +176,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({addDeviceMarker, addPolygonLayer, layerTypeChecking}, dispatch)
+    return bindActionCreators({addDeviceMarker, addPolygonLayer}, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapClass);

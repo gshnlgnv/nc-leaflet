@@ -13,7 +13,7 @@ export const HeatmapFunction = () => {
         })
         : [];
 
-    const arr = [];
+    const pointsList = [];
 
-    return arr.push(L.heatLayer(points).addTo(map));
+    return pointsList.push(L.heatLayer(points).addTo(map));
 }

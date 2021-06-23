@@ -53,5 +53,6 @@ module.exports = {
                 { from: "./src/pics", to: "./dist/pics" },
             ],
         }),
+
     ]
 };
