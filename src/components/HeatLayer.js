@@ -1,19 +1,37 @@
 import React from 'react';
-import {heatPoints} from "../store/heatmapPoints";
+import {heatPointsMock} from "../store/heatmapPoints";
 import 'leaflet.heat';
 import {useMap} from 'react-leaflet';
 import L from 'leaflet';
 
-export const HeatmapFunction = () => {
+export const HeatmapFunction = ({floor, active}) => {
     const map = useMap();
 
-    const points = heatPoints
-        ? heatPoints.map((p) => {
-            return [p[0], p[1], p[2]]; // lat lng intensity
-        })
-        : [];
+    console.log('heatMap', active);
+    console.log('floor', floor);
 
-    const pointsList = [];
 
-    return pointsList.push(L.heatLayer(points).addTo(map));
+
+
+    for (let i = 0; i < heatPointsMock.length; i++) {
+        if (heatPointsMock[i].floor === floor) {
+            const points = heatPointsMock
+                ? heatPointsMock[i].points.map((p) => {
+                    return [p[0], p[1], p[2]]; // lat lng intensity
+                })
+                : [];
+
+            const pointsList = [];
+
+            const heatLayer = L.heatLayer(points).addTo(map)
+
+            if (!active) {
+                map.removeLayer(heatLayer);
+            }
+
+            return pointsList.push(heatLayer);
+        }
+    }
+
+    return null;
 }

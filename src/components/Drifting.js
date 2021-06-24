@@ -1,5 +1,5 @@
 import React from 'react'
-import {MapContainer, TileLayer, Popup, Tooltip} from "react-leaflet";
+import {Popup, Tooltip} from "react-leaflet";
 import ReactLeafletDriftMarker from "react-leaflet-drift-marker"
 
 function gen_position() {

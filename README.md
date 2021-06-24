@@ -1,13 +1,18 @@
 ##Sandbox for testing Leaflet library
 
 
-<img src="https://a.radikal.ru/a06/2106/70/d1903156ca3b.jpg" alt="netcube-app" width="400"/>
+<img src="https://a.radikal.ru/a08/2106/75/35f224335619.png" alt="netcube-app" width="400"/>
 
 
-* Custom svg layer (one tile)
-* Customed buttons for making polygons
-* Customed buttons for placing markers
+* Custom svg layers select (one tile per floor)
+* Changing colors of selected polygon + click counter
+* Customed buttons for making polygons (off)
+* Customed buttons for placing markers (off)
 * Polygon and markers coordinates are placed in store
+* Heat map (random points)
+* Drifting markers (random coordinates)
+
+
 
 
 

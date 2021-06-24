@@ -1,4 +1,4 @@
-import {ADD_DEVICE_MARKER, DELETE_DEVICE_MARKER, ADD_POLYGON_LAYER, CHECKING_LAYER} from './consts';
+import {ADD_DEVICE_MARKER, DELETE_DEVICE_MARKER, ADD_POLYGON_LAYER, CHECKING_LAYER, ENABLE_HEAT_LAYER, ENABLE_MARKER_MOVEMENT} from './consts';
 
 export const addDeviceMarker = (data) => {
     return {
@@ -28,4 +28,14 @@ export const layerTypeChecking = (layer) => {
     }
 }
 
+export const enableHeatLayer = () => {
+    return {
+        type: ENABLE_HEAT_LAYER,
+    }
+}
 
+export const actionMarkerMovement = () => {
+    return {
+        type: ENABLE_MARKER_MOVEMENT,
+    }
+}

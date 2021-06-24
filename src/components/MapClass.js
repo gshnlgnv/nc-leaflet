@@ -1,26 +1,41 @@
 import React from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import '../styles/MapClass.css';
+import medcentrLogo from '../pics/almazova_logo_text.png';
+import deviceIcon from '../pics/microchip.png';
 
 import {MapContainer, FeatureGroup, ImageOverlay} from 'react-leaflet';
 import {EditControl} from "react-leaflet-draw";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import '../styles/MapClass.css';
 import DeviceMarkers from "./DeviceMarkers";
-import {addDeviceMarker, addPolygonLayer} from '../store/actions';
-import deviceIcon from '../pics/microchip.png';
-import medcentrLogo from '../pics/unnamed.jpg';
+import {addDeviceMarker, addPolygonLayer, } from '../store/actions';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
-
 import {HeatmapFunction} from './HeatLayer';
 import Drifting from './Drifting';
 import MenuTop from "./MenuTop";
 
 class MapClass extends React.Component {
     render() {
+        const drawHeatMap = () => {
+            const {heatMap, currentLayer} = this.props;
+
+            if (currentLayer && heatMap) {
+                return <HeatmapFunction floor={currentLayer} active={heatMap}/>
+            }
+        };
+
+        const drawMarkerDrifting = () => {
+            const {markerMovement} = this.props;
+
+            if (markerMovement) {
+                return <Drifting/>
+            }
+        };
+
         // names for standart leaflet buttons
         L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
         L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию';
@@ -84,19 +99,21 @@ class MapClass extends React.Component {
             const {currentLayer} = this.props;
 
             if (!currentLayer) {
-                return <div className='noMap'><img style={{width: 150, height: 150}} src={medcentrLogo} alt='logo'/>
+                return <div className='noMap'><img src={medcentrLogo} alt='logo'/>
                 </div>
             }
 
             return mapLayers.map((layer, index) => {
                 if (layer.floor === currentLayer) {
                     return (
-                        <ImageOverlay
-                            key={index}
-                            attribution={layer.attr}
-                            url={layer.url}
-                            bounds={layer.bounds}
-                        />
+                        <div>
+                            <ImageOverlay
+                                key={index}
+                                attribution={layer.attr}
+                                url={layer.url}
+                                bounds={layer.bounds}
+                            />
+                        </div>
                     )
                 }
             });
@@ -113,14 +130,9 @@ class MapClass extends React.Component {
             });
         }
 
-        console.log('pol', this.props.polygonLayers);
-
         return (
             <div className="container">
                 <div className="map">
-
-                    <MenuTop/>
-
                     <MapContainer
                         center={[35, 50]}
                         zoom={5}
@@ -128,10 +140,7 @@ class MapClass extends React.Component {
                         scrollWheelZoom={true}
                         zoomControl={false}
                     >
-
-                        <HeatmapFunction/>
-                        <Drifting/>
-
+                        <MenuTop/>
                         <FeatureGroup>
                             <EditControl
                                 position='topright'
@@ -157,10 +166,13 @@ class MapClass extends React.Component {
                             />
                         </FeatureGroup>
 
-                        {drawLayers()}
                         <DeviceMarkers/>
-                        <DrawingPolygonsFromState/>
+                        {drawMarkerDrifting()}
+                        {drawHeatMap()}
+                        {drawLayers()}
+                        {DrawingPolygonsFromState()}
                     </MapContainer>
+
                 </div>
             </div>
         )
@@ -172,11 +184,13 @@ const mapStateToProps = (state) => {
         polygonLayers: state.dataReducer.polygonLayers,
         markerPositions: state.dataReducer.deviceMarkers,
         currentLayer: state.dataReducer.currentLayer,
+        heatMap: state.dataReducer.heatMap,
+        markerMovement: state.dataReducer.markerMovement,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({addDeviceMarker, addPolygonLayer}, dispatch)
+    return bindActionCreators({addDeviceMarker, addPolygonLayer, }, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapClass);
