@@ -24,11 +24,7 @@ class MapClass extends React.Component {
             const {heatMap, currentLayer} = this.props;
 
             if (currentLayer) {
-                return(
-                    <div style={{color: "white"}}>
-                        <HeatmapFunction floor={currentLayer} activeHeat={heatMap}/>
-                    </div>
-                )
+                return <HeatmapFunction floor={currentLayer} activeHeat={heatMap}/>
             }
         };
 
@@ -176,11 +172,9 @@ class MapClass extends React.Component {
                         <DeviceMarkers/>
                         {drawMarkerDrifting()}
                         {drawHeatMap()}
-
                         {drawLayers()}
                         {DrawingPolygonsFromState()}
                     </MapContainer>
-
                 </div>
             </div>
         )
