@@ -143,31 +143,32 @@ class MapClass extends React.Component {
                         zoomControl={false}
                     >
                         <MenuTop/>
-                        <FeatureGroup>
-                            <EditControl
-                                position='topright'
-                                onEdited={_onEditPath}
-                                onCreated={_onCreate}
-                                onDeleted={_onDeleted}
-                                onDrawStart={_onDrawStart}
-                                draw={{
-                                    // polyline: true,
-                                    // rectangle: false,
-                                    // circlemarker: false,
-                                    // circle: false,
-                                    polygon: {
-                                        shapeOptions: {
-                                            color: '#97009c',
-                                            opacity: 0.5,  // polygon border opacity
-                                        }
-                                    },
-                                    // marker: {
-                                    //     icon: deviceIcon123,
-                                    //     title: "device abc",
-                                    // }
-                                }}
-                            />
-                        </FeatureGroup>
+
+                        {/*<FeatureGroup>*/}
+                        {/*    <EditControl*/}
+                        {/*        position='topright'*/}
+                        {/*        onEdited={_onEditPath}*/}
+                        {/*        onCreated={_onCreate}*/}
+                        {/*        onDeleted={_onDeleted}*/}
+                        {/*        onDrawStart={_onDrawStart}*/}
+                        {/*        draw={{*/}
+                        {/*            // polyline: true,*/}
+                        {/*            // rectangle: false,*/}
+                        {/*            // circlemarker: false,*/}
+                        {/*            // circle: false,*/}
+                        {/*            polygon: {*/}
+                        {/*                shapeOptions: {*/}
+                        {/*                    color: '#97009c',*/}
+                        {/*                    opacity: 0.5,  // polygon border opacity*/}
+                        {/*                }*/}
+                        {/*            },*/}
+                        {/*            // marker: {*/}
+                        {/*            //     icon: deviceIcon123,*/}
+                        {/*            //     title: "device abc",*/}
+                        {/*            // }*/}
+                        {/*        }}*/}
+                        {/*    />*/}
+                        {/*</FeatureGroup>*/}
 
                         <DeviceMarkers/>
                         {drawMarkerDrifting()}
