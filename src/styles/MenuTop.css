@@ -21,6 +21,27 @@
   padding-right: 10px;
 }
 
+.aside__additional_blocks {
+  flex-direction: row;
+  display: none;
+}
+
+.show {
+  display: flex;
+  animation: inputMoving 0.7s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes inputMoving {
+  0% {
+    margin-left: -100px;
+    opacity: 0;
+  }
+  100% {
+    margin-left: 0px;
+    opacity: 1;
+  }
+}
 .asideMenu__block_heatSwitcher {
   display: flex;
   flex-direction: row;

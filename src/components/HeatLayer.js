@@ -3,35 +3,41 @@ import {heatPointsMock} from "../store/heatmapPoints";
 import 'leaflet.heat';
 import {useMap} from 'react-leaflet';
 import L from 'leaflet';
+import '../styles/MapClass.css';
 
-export const HeatmapFunction = ({floor, active}) => {
+let currentHeatLayer = null;
+
+export const HeatmapFunction = ({floor, activeHeat}) => {
     const map = useMap();
+    const pointsList = [];
 
-    console.log('heatMap', active);
-    console.log('floor', floor);
+    if (activeHeat === null) {
+        return null;
+    }
 
+    if (activeHeat === false) {
+        map.removeLayer(currentHeatLayer);
+    }
 
+    if (floor && activeHeat === true) {
+        for (let i = 0; i < heatPointsMock.length; i++) {
+            if (heatPointsMock[i].floor === floor) {
+                const points = heatPointsMock
+                    ? heatPointsMock[i].points.map((p) => {
+                        return [p[0], p[1], p[2]]; // lat lng intensity
+                    })
+                    : [];
 
+                let drawingHeatLayer = L.heatLayer(points).addTo(map);
 
-    for (let i = 0; i < heatPointsMock.length; i++) {
-        if (heatPointsMock[i].floor === floor) {
-            const points = heatPointsMock
-                ? heatPointsMock[i].points.map((p) => {
-                    return [p[0], p[1], p[2]]; // lat lng intensity
-                })
-                : [];
+                currentHeatLayer = drawingHeatLayer;
 
-            const pointsList = [];
-
-            const heatLayer = L.heatLayer(points).addTo(map)
-
-            if (!active) {
-                map.removeLayer(heatLayer);
+                return pointsList.push(drawingHeatLayer);
             }
-
-            return pointsList.push(heatLayer);
         }
     }
 
     return null;
 }
+
+

@@ -12,7 +12,7 @@ const initialState = {
     deviceMarkers: markers,
     polygonLayers: kabinets,
     currentLayer: null,
-    heatMap: false,
+    heatMap: null,
     markerMovement: false,
 }
 

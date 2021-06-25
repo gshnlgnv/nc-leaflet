@@ -23,8 +23,12 @@ class MapClass extends React.Component {
         const drawHeatMap = () => {
             const {heatMap, currentLayer} = this.props;
 
-            if (currentLayer && heatMap) {
-                return <HeatmapFunction floor={currentLayer} active={heatMap}/>
+            if (currentLayer) {
+                return(
+                    <div style={{color: "white"}}>
+                        <HeatmapFunction floor={currentLayer} activeHeat={heatMap}/>
+                    </div>
+                )
             }
         };
 
@@ -59,6 +63,12 @@ class MapClass extends React.Component {
 // actions on create layer
         const _onCreate = (e) => {
             const {layerType, layer} = e;
+
+            if (layerType === 'polyline') {
+
+                console.log(layer);
+            }
+
 
             if (layerType === 'polygon') {
                 const {_leaflet_id} = layer;
@@ -105,16 +115,12 @@ class MapClass extends React.Component {
 
             return mapLayers.map((layer, index) => {
                 if (layer.floor === currentLayer) {
-                    return (
-                        <div>
-                            <ImageOverlay
+                    return <ImageOverlay
                                 key={index}
                                 attribution={layer.attr}
                                 url={layer.url}
                                 bounds={layer.bounds}
                             />
-                        </div>
-                    )
                 }
             });
         }
@@ -149,9 +155,10 @@ class MapClass extends React.Component {
                                 onDeleted={_onDeleted}
                                 onDrawStart={_onDrawStart}
                                 draw={{
-                                    rectangle: false,
-                                    circlemarker: false,
-                                    circle: false,
+                                    // polyline: true,
+                                    // rectangle: false,
+                                    // circlemarker: false,
+                                    // circle: false,
                                     polygon: {
                                         shapeOptions: {
                                             color: '#97009c',
@@ -169,6 +176,7 @@ class MapClass extends React.Component {
                         <DeviceMarkers/>
                         {drawMarkerDrifting()}
                         {drawHeatMap()}
+
                         {drawLayers()}
                         {DrawingPolygonsFromState()}
                     </MapContainer>
