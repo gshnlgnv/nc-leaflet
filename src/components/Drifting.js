@@ -3,11 +3,8 @@ import {Popup, Tooltip} from "react-leaflet";
 import ReactLeafletDriftMarker from "react-leaflet-drift-marker";
 import {driftingPositions} from '../store/polygons';
 
-
 //todo:
 // 1) если тогл выключить - надо размонтировать это (componentWillUnmount method)
-// 2) починить интервалы, чтобы завершался дрифт
-
 
 let intervalTimer;
 
@@ -15,37 +12,30 @@ export default class Drifting extends React.Component {
     constructor() {
         super();
         this.state = {
-            // latlng: gen_position()
             latlng: driftingPositions[0],
             arrayIndex: 0,
         }
     }
 
     gen_position() {
-            const {arrayIndex} = this.state;
+        const {arrayIndex} = this.state;
 
-            console.log('driftingPositions.length == ', driftingPositions.length - 1);
-            console.log('arrayIndex ==', arrayIndex + 1 );
+        if (arrayIndex === (driftingPositions.length - 2)) {
+            clearInterval(intervalTimer);
+        }
 
-            if (arrayIndex + 1 === driftingPositions.length - 1) {
+        if (arrayIndex < driftingPositions.length - 1) {
 
-                clearInterval(intervalTimer);
-                return null;
+            if (JSON.stringify(this.state.latlng) !== JSON.stringify(driftingPositions[arrayIndex + 1])) {
+                this.setState({arrayIndex: this.state.arrayIndex + 1});
+
+                return driftingPositions[arrayIndex + 1];
             }
-
-            if (arrayIndex + 1< driftingPositions.length -1) {
-
-                if ( JSON.stringify(this.state.latlng) !== JSON.stringify(driftingPositions[arrayIndex + 1]) ) {
-                    this.setState({arrayIndex: this.state.arrayIndex + 1});
-                    return driftingPositions[arrayIndex + 1];
-                }
-            }
+        }
     }
 
     componentDidMount() {
         intervalTimer = setInterval(() => {
-
-            // updates position every 5 sec
             this.setState({latlng: this.gen_position()});
         }, 1000);
     }
