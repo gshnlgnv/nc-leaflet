@@ -3,9 +3,6 @@ import {Popup, Tooltip} from "react-leaflet";
 import ReactLeafletDriftMarker from "react-leaflet-drift-marker";
 import {driftingPositions} from '../store/polygons';
 
-//todo:
-// 1) если тогл выключить - надо размонтировать это (componentWillUnmount method)
-
 let intervalTimer;
 
 export default class Drifting extends React.Component {
@@ -17,6 +14,10 @@ export default class Drifting extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        window.clearInterval(intervalTimer);
+    }
+
     gen_position() {
         const {arrayIndex} = this.state;
 
@@ -25,7 +26,6 @@ export default class Drifting extends React.Component {
         }
 
         if (arrayIndex < driftingPositions.length - 1) {
-
             if (JSON.stringify(this.state.latlng) !== JSON.stringify(driftingPositions[arrayIndex + 1])) {
                 this.setState({arrayIndex: this.state.arrayIndex + 1});
 

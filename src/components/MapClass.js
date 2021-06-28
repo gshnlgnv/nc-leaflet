@@ -32,8 +32,11 @@ class MapClass extends React.Component {
             const {markerMovement} = this.props;
 
             if (markerMovement) {
-                return <Drifting/>
+                return <Drifting markerMovement={markerMovement}/>
             }
+
+            // return markerMovement ? <Drifting/> : null;
+
         };
 
         // names for standart leaflet buttons
