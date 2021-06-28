@@ -18,6 +18,9 @@ import {HeatmapFunction} from './HeatLayer';
 import Drifting from './Drifting';
 import MenuTop from "./MenuTop";
 
+//todo:
+// 1 - очищать уровни хит при переходе на новый этаж
+
 class MapClass extends React.Component {
     render() {
         const drawHeatMap = () => {
@@ -34,9 +37,6 @@ class MapClass extends React.Component {
             if (markerMovement) {
                 return <Drifting markerMovement={markerMovement}/>
             }
-
-            // return markerMovement ? <Drifting/> : null;
-
         };
 
         // names for standart leaflet buttons
@@ -67,7 +67,6 @@ class MapClass extends React.Component {
 
                 console.log(layer);
             }
-
 
             if (layerType === 'polygon') {
                 const {_leaflet_id} = layer;

@@ -6,16 +6,13 @@ import L from 'leaflet';
 import '../styles/MapClass.css';
 
 let currentHeatLayer = null;
+let currentHeatLayerID = null;
 
 export const HeatmapFunction = ({floor, activeHeat}) => {
     const map = useMap();
     const pointsList = [];
 
-    if (activeHeat === null) {
-        return null;
-    }
-
-    if (activeHeat === false) {
+    if (activeHeat === false || currentHeatLayerID) {
         map.removeLayer(currentHeatLayer);
     }
 
@@ -30,6 +27,7 @@ export const HeatmapFunction = ({floor, activeHeat}) => {
 
                 let drawingHeatLayer = L.heatLayer(points).addTo(map);
 
+                currentHeatLayerID = drawingHeatLayer._leaflet_id;
                 currentHeatLayer = drawingHeatLayer;
 
                 return pointsList.push(drawingHeatLayer);

@@ -50,7 +50,7 @@ module.exports = {
         }),
         new CopyPlugin({
             patterns: [
-                { from: "./src/pics", to: "./dist/pics" },
+                { from: "./src/pics", to: "./pics" },
             ],
         }),
 
