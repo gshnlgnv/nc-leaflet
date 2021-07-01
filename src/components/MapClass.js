@@ -3,10 +3,8 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import '../styles/MapClass.css';
 import medcentrLogo from '../pics/almazova_logo_text.png';
-import deviceIcon from '../pics/microchip.png';
 
-import {MapContainer, FeatureGroup, ImageOverlay} from 'react-leaflet';
-import {EditControl} from "react-leaflet-draw";
+import {MapContainer, ImageOverlay} from 'react-leaflet';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
@@ -101,17 +99,10 @@ class MapClass extends React.Component {
             return polygonLayers.map(({'id': id, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
                 if (floor === currentLayer) {
 
-                    console.log('polynames current floor ', name);
-
                     return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol}/>
                 }
             });
         }
-
-        // names for standart leaflet buttons
-        L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
-        L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию';
-        L.drawLocal.draw.toolbar.buttons.marker = 'Поставить маркер';
 
 // drawing polygon with custom button
         const mapEvent = (eventing) => {
@@ -122,54 +113,6 @@ class MapClass extends React.Component {
 
             return !cb[0].dispatchEvent(e);
         };
-
-// actions on editing layer
-        const _onEditPath = (e) => {
-            console.log("editing");
-        }
-
-// actions on create layer
-        const _onCreate = (e) => {
-            const {layerType, layer} = e;
-
-            if (layerType === 'polyline') {
-
-                console.log(layer);
-            }
-
-            if (layerType === 'polygon') {
-                const {_leaflet_id} = layer;
-
-                this.props.addPolygonLayer({id: _leaflet_id, latlngs: coordinatesArray(layer.getLatLngs()[0])});
-            }
-        }
-
-// actions on deleting layer
-        const _onDeleted = (e) => {
-            console.log("deleted");
-        }
-
-        const _onDrawStart = (e) => {
-            console.log("_onDrawStart", e);
-        };
-
-// custom marker icon
-        let deviceIcon123 = L.icon({
-            iconUrl: deviceIcon,
-            iconSize: [25, 41],
-            iconAnchor: [10, 41],
-            popupAnchor: [2, -40],
-        });
-
-        const coordinatesArray = (incoming) => {
-            let result = [];
-
-            incoming.map((coord) => {
-                result.push(Object.values(coord));
-            })
-
-            return result;
-        }
 
         return (
             <div className="container">
@@ -183,35 +126,7 @@ class MapClass extends React.Component {
                         zoomControl={false}
                     >
                         <MenuTop/>
-
                         {drawEditConsole()}
-
-                        {/*<FeatureGroup>*/}
-                        {/*    <EditControl*/}
-                        {/*        position='topright'*/}
-                        {/*        onEdited={_onEditPath}*/}
-                        {/*        onCreated={_onCreate}*/}
-                        {/*        onDeleted={_onDeleted}*/}
-                        {/*        onDrawStart={_onDrawStart}*/}
-                        {/*        draw={{*/}
-                        {/*            // polyline: true,*/}
-                        {/*            // rectangle: false,*/}
-                        {/*            // circlemarker: false,*/}
-                        {/*            // circle: false,*/}
-                        {/*            polygon: {*/}
-                        {/*                shapeOptions: {*/}
-                        {/*                    color: '#97009c',*/}
-                        {/*                    opacity: 0.5,  // polygon border opacity*/}
-                        {/*                }*/}
-                        {/*            },*/}
-                        {/*            // marker: {*/}
-                        {/*            //     icon: deviceIcon123,*/}
-                        {/*            //     title: "device abc",*/}
-                        {/*            // }*/}
-                        {/*        }}*/}
-                        {/*    />*/}
-                        {/*</FeatureGroup>*/}
-
                         <DeviceMarkers/>
                         {drawMarkerDrifting()}
                         {drawHeatMap()}

@@ -4,10 +4,33 @@ import {EditControl} from "react-leaflet-draw";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {showModal, addPolygonLayer} from '../store/actions';
-
+import deviceIcon from "../pics/microchip.png";
 
 class EditConsole extends React.Component {
     render() {
+        // names for standart leaflet buttons
+        L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон1';
+        L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию1';
+        L.drawLocal.draw.toolbar.buttons.marker = 'Поставить маркер1';
+
+        // actions on editing layer
+        const _onEditPath = (e) => {
+            console.log("editing");
+        }
+
+        // actions on deleting layer
+        const _onDeleted = (e) => {
+            console.log("deleted");
+        }
+
+        // custom marker icon
+        let deviceIcon123 = L.icon({
+            iconUrl: deviceIcon,
+            iconSize: [25, 41],
+            iconAnchor: [10, 41],
+            popupAnchor: [2, -40],
+        });
+
         const coordinatesArray = (incoming) => {
             let result = [];
 
@@ -38,8 +61,6 @@ class EditConsole extends React.Component {
             if (layerType === 'polygon') {
                 const {_leaflet_id} = layer;
 
-                console.log('polygonNamepolygonName ==', polygonName);
-
                 this.props.addPolygonLayer({
                     id: _leaflet_id,
                     mapLocation: currentLayer,
@@ -49,17 +70,15 @@ class EditConsole extends React.Component {
             }
         }
 
-        return(
+        return (
             <div>
                 <FeatureGroup>
                     <EditControl
                         position='topright'
-
                         onDrawStart={_onDrawStart}
                         onCreated={_onCreate}
                         // onEdited={_onEditPath}
                         // onDeleted={_onDeleted}
-
                         draw={{
                             // polyline: true,
                             // rectangle: false,
