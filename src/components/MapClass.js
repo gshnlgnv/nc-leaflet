@@ -11,15 +11,14 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import DeviceMarkers from "./DeviceMarkers";
-import {addDeviceMarker, addPolygonLayer, } from '../store/actions';
+import {addDeviceMarker, addPolygonLayer, showModal, polygonNameSaving, deletePolygon} from '../store/actions';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
 import {HeatmapFunction} from './HeatLayer';
 import Drifting from './Drifting';
 import MenuTop from "./MenuTop";
-
-//todo:
-// 1 - очищать уровни хит при переходе на новый этаж
+import EditConsole from './EditConsole';
+import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
 
 class MapClass extends React.Component {
     render() {
@@ -38,6 +37,76 @@ class MapClass extends React.Component {
                 return <Drifting markerMovement={markerMovement}/>
             }
         };
+
+        const drawEditConsole = () => {
+            const {editConsoleSwitch} = this.props;
+
+            if (editConsoleSwitch) {
+                return <EditConsole/>;
+            }
+        }
+
+        const drawModal = () => {
+            const {showModalWindow, showModal, polygonNameSaving} = this.props;
+
+            const disableModal = () => {
+                showModal();
+            }
+
+            const fixPolygonName = (name) => {
+                polygonNameSaving(name);
+            }
+
+            return showModalWindow ?
+                <ModalPolygonsDraw
+                    active={showModalWindow}
+                    disable={disableModal}
+                    polygonName={fixPolygonName}
+                /> : null;
+        }
+
+        // drawing svg layers/floors of the building
+        const drawLayers = () => {
+            const {currentLayer} = this.props;
+
+            if (!currentLayer) {
+                return <div className='noMap'><img src={medcentrLogo} alt='logo'/>
+                </div>
+            }
+
+            return mapLayers.map((layer, index) => {
+                if (layer.floor === currentLayer) {
+                    return <ImageOverlay
+                        key={index}
+                        attribution={layer.attr}
+                        url={layer.url}
+                        bounds={layer.bounds}
+                    />
+                }
+            });
+        }
+
+        // drawing polygons for particular floor
+        const DrawingPolygonsFromState = () => {
+            const {polygonLayers, currentLayer} = this.props;
+
+            if (!polygonLayers) {
+                return null;
+            }
+
+            const deletePol = (id) => {
+                this.props.deletePolygon(id);
+            }
+
+            return polygonLayers.map(({'id': id, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
+                if (floor === currentLayer) {
+
+                    console.log('polynames current floor ', name);
+
+                    return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol}/>
+                }
+            });
+        }
 
         // names for standart leaflet buttons
         L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
@@ -102,40 +171,9 @@ class MapClass extends React.Component {
             return result;
         }
 
-        // drawing svg layers/floors of the building
-        const drawLayers = () => {
-            const {currentLayer} = this.props;
-
-            if (!currentLayer) {
-                return <div className='noMap'><img src={medcentrLogo} alt='logo'/>
-                </div>
-            }
-
-            return mapLayers.map((layer, index) => {
-                if (layer.floor === currentLayer) {
-                    return <ImageOverlay
-                                key={index}
-                                attribution={layer.attr}
-                                url={layer.url}
-                                bounds={layer.bounds}
-                            />
-                }
-            });
-        }
-
-        // drawing polygons for particular floor
-        const DrawingPolygonsFromState = () => {
-            const {polygonLayers, currentLayer} = this.props;
-
-            return polygonLayers.map(({'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
-                if (floor === currentLayer) {
-                    return <PolygonComponent key={index} polygons={polygons} name={name}/>
-                }
-            });
-        }
-
         return (
             <div className="container">
+                {drawModal()}
                 <div className="map">
                     <MapContainer
                         center={[35, 50]}
@@ -145,6 +183,8 @@ class MapClass extends React.Component {
                         zoomControl={false}
                     >
                         <MenuTop/>
+
+                        {drawEditConsole()}
 
                         {/*<FeatureGroup>*/}
                         {/*    <EditControl*/}
@@ -191,11 +231,13 @@ const mapStateToProps = (state) => {
         currentLayer: state.dataReducer.currentLayer,
         heatMap: state.dataReducer.heatMap,
         markerMovement: state.dataReducer.markerMovement,
+        editConsoleSwitch: state.dataReducer.editConsole,
+        showModalWindow: state.dataReducer.showModalWindow,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({addDeviceMarker, addPolygonLayer, }, dispatch)
+    return bindActionCreators({addDeviceMarker, addPolygonLayer, showModal, polygonNameSaving, deletePolygon}, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapClass);

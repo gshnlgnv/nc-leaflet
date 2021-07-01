@@ -21,7 +21,6 @@ class DeviceMarkers extends React.Component {
                          {deviceInfo.content}
                          <button title="edit" onClick={() => console.log('edit')}>edit</button>
                          <button title="delete" onClick={() => {
-                             console.log('delete')
                              this.props.deleteMarker(deviceInfo.key)
                          } }>x</button>
                      </Popup>

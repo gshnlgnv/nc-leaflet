@@ -4,7 +4,7 @@
   flex-direction: row;
   min-height: 52px;
   margin: 10px 10px 10px 10px;
-  z-index: 3610;
+  z-index: 1000;
 }
 
 .asideMenu__block {
@@ -98,6 +98,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.asideMenu__block_settings {
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=MenuTop.css.map */

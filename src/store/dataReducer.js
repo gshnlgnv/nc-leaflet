@@ -1,4 +1,15 @@
-import {ADD_DEVICE_MARKER, DELETE_DEVICE_MARKER, ADD_POLYGON_LAYER, CHECKING_LAYER, ENABLE_HEAT_LAYER, ENABLE_MARKER_MOVEMENT} from './consts';
+import {
+    ADD_DEVICE_MARKER,
+    DELETE_DEVICE_MARKER,
+    ADD_POLYGON_LAYER,
+    CHECKING_LAYER,
+    ENABLE_HEAT_LAYER,
+    ENABLE_MARKER_MOVEMENT,
+    ENABLE_EDIT_CONSOLE,
+    SHOW_MODAL,
+    POLYGON_NAME,
+    DELETE_POLYGON
+} from './consts';
 import {kabinets, markers} from "./polygons";
 
 const customMarker = new L.icon({
@@ -14,6 +25,9 @@ const initialState = {
     currentLayer: null,
     heatMap: null,
     markerMovement: false,
+    editConsole: false,
+    showModalWindow: false,
+    polygonName: null,
 }
 
 export const dataReducer = (state = initialState, action) => {
@@ -56,6 +70,26 @@ export const dataReducer = (state = initialState, action) => {
             return {
                 ...state,
                 markerMovement: !state.markerMovement,
+            }
+        case ENABLE_EDIT_CONSOLE:
+            return {
+                ...state,
+                editConsole: !state.editConsole,
+            }
+        case SHOW_MODAL:
+            return {
+                ...state,
+                showModalWindow: !state.showModalWindow,
+            }
+        case POLYGON_NAME:
+            return {
+                ...state,
+                polygonName: action.payload,
+            }
+        case DELETE_POLYGON:
+            return {
+                ...state,
+                polygonLayers: state.polygonLayers.filter(item => item.id !== action.payload)
             }
         default:
             return state;

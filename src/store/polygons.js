@@ -10,6 +10,7 @@ export const kabinets = [
         "id": 161,
         "mapLocation": '1F',
         "roomName": 'Компната успеха',
+        'color': 'red',
         "latlngs":
             [
                 [35.406014197115184, 41.63818359375001],

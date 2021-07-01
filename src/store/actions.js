@@ -1,4 +1,14 @@
-import {ADD_DEVICE_MARKER, DELETE_DEVICE_MARKER, ADD_POLYGON_LAYER, CHECKING_LAYER, ENABLE_HEAT_LAYER, ENABLE_MARKER_MOVEMENT} from './consts';
+import {
+    ADD_DEVICE_MARKER,
+    DELETE_DEVICE_MARKER,
+    ADD_POLYGON_LAYER,
+    CHECKING_LAYER,
+    ENABLE_HEAT_LAYER,
+    ENABLE_MARKER_MOVEMENT,
+    ENABLE_EDIT_CONSOLE,
+    SHOW_MODAL,
+    POLYGON_NAME, DELETE_POLYGON
+} from './consts';
 
 export const addDeviceMarker = (data) => {
     return {
@@ -37,5 +47,31 @@ export const enableHeatLayer = () => {
 export const actionMarkerMovement = () => {
     return {
         type: ENABLE_MARKER_MOVEMENT,
+    }
+}
+
+export const enableEdit = () => {
+    return {
+        type: ENABLE_EDIT_CONSOLE,
+    }
+}
+
+export const showModal = () => {
+    return {
+        type: SHOW_MODAL,
+    }
+}
+
+export const polygonNameSaving = (name) => {
+    return {
+        type: POLYGON_NAME,
+        payload: name,
+    }
+}
+
+export const deletePolygon = (id) => {
+    return {
+        type: DELETE_POLYGON,
+        payload: id,
     }
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {layerTypeChecking, enableHeatLayer, actionMarkerMovement} from '../store/actions';
+import {layerTypeChecking, enableHeatLayer, actionMarkerMovement, enableEdit} from '../store/actions';
 import '../styles/MenuTop.css';
 import medcentrLogo from "../pics/unnamed.jpg";
+import settings from '../pics/settings.png';
 
 class MenuTop extends React.Component {
     constructor() {
@@ -20,6 +21,10 @@ class MenuTop extends React.Component {
     enableMarkerMovement() {
         this.props.actionMarkerMovement();
     }
+
+    enableEditConsole() {
+        this.props.enableEdit();
+    };
 
     render() {
         const {activeBlocks} = this.state;
@@ -61,6 +66,11 @@ class MenuTop extends React.Component {
                             <div className="asideMenu__block_heatSwitcher_text">Переместить маркер</div>
                         </div>
                     </div>
+                    <div className='asideMenu__block'>
+                        <div className='asideMenu__block_settings' onClick={() => this.enableEditConsole()}>
+                            <img src={settings} alt={'edit'} style={{width: 20, height: 20}}/>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -68,7 +78,7 @@ class MenuTop extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({layerTypeChecking, enableHeatLayer, actionMarkerMovement}, dispatch)
+    return bindActionCreators({layerTypeChecking, enableHeatLayer, actionMarkerMovement, enableEdit}, dispatch)
 };
 
 export default connect(null, mapDispatchToProps)(MenuTop);

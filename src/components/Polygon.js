@@ -2,7 +2,7 @@ import React from 'react';
 import {useMemo, useState} from 'react';
 import {Polygon, Popup} from 'react-leaflet';
 
-export const PolygonComponent = ({polygons, name}) => {
+export const PolygonComponent = ({polygons, name, id, deletePol}) => {
     const [clickedCount, setClickedCount] = useState(0);
     const [currentColor, setColor] = useState({color: 'red'});
 
@@ -23,7 +23,9 @@ export const PolygonComponent = ({polygons, name}) => {
             eventHandlers={eventHandlers}
         >
             <Popup>
-                {name} <br/> Easily customizable. {clickedCount}
+                {name} <br/>
+                Easily customizable. {clickedCount}  <br/>
+                <button onClick={() => deletePol(id)}>delete polygon</button>
             </Popup>
         </Polygon>
     )
