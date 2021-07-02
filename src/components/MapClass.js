@@ -9,14 +9,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import DeviceMarkers from "./DeviceMarkers";
-import {
-    addDeviceMarker,
-    addPolygonLayer,
-    showModal,
-    polygonNameSaving,
-    deletePolygon,
-    deleteMarker
-} from '../store/actions';
+import {addDeviceMarker, addPolygonLayer, showModal, polygonNameSaving, deletePolygon, deleteMarker} from '../store/actions';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
 import {HeatmapFunction} from './HeatLayer';
@@ -24,7 +17,7 @@ import Drifting from './Drifting';
 import MenuTop from "./MenuTop";
 import EditConsole from './EditConsole';
 import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
-import {EditControl} from "react-leaflet-draw";
+
 import {TEST_DeviceMarkers} from './testMarkers';
 
 class MapClass extends React.Component {
@@ -81,8 +74,7 @@ class MapClass extends React.Component {
             /> : null;
     }
 
-    // drawing svg layers/floors of the building
-     drawLayers = () => {
+    drawLayers = () => {
         const {currentLayer} = this.props;
 
         if (!currentLayer) {
@@ -102,7 +94,6 @@ class MapClass extends React.Component {
         });
     }
 
-    // drawing polygons for particular floor
      DrawingPolygonsFromState = () => {
         const {polygonLayers, currentLayer} = this.props;
 
@@ -132,72 +123,7 @@ class MapClass extends React.Component {
         return !cb[0].dispatchEvent(e);
     };
 
-     MyComponent() {
-        const map = useMapEvents({
-            click: () => {
-                console.log('map = ',map);
-
-                // L.map.layers
-                console.log('L.map.layers = ', map.layers);
-            },
-        })
-
-        return null
-    }
-
-    // // начало рисования
-    //  _onDrawStart(e) {
-    //     console.log("_onDrawStart", e);
-    //     const {showModal} = this.props;
-    //
-    //    showModal();
-    // };
-
-    // конец рисования
-     _onCreated = (e) => {
-        const {layerType, layer} = e;
-        const {currentLayer, polygonName} = this.props;
-
-        // if (layerType === 'polyline') {
-        //     console.log(layer);
-        // }
-
-        console.log('e',e);
-
-        if (layerType === 'polygon') {
-            const {_leaflet_id} = layer;
-
-            this.props.addPolygonLayer({
-                id: _leaflet_id,
-                mapLocation: currentLayer,
-                roomName: polygonName,
-                latlngs: this.coordinatesArray(layer.getLatLngs()[0])
-            });
-        }
-    }
-
-    coordinatesArray = (incoming) => {
-        let result = [];
-
-        incoming.map((coord) => {
-            result.push(Object.values(coord));
-        })
-
-        return result;
-    }
-
-     _onEditStart = (e) => {
-        console.log('_onEditStart', e);
-    };
-
     render() {
-       const _onDrawStart = (e) => {
-            console.log("_onDrawStart", e);
-            const {showModal} = this.props;
-
-            showModal();
-        };
-
         return (
             <div className="container">
                 {this.drawModal()}
@@ -210,42 +136,13 @@ class MapClass extends React.Component {
                     >
                         <MenuTop/>
                         {this.drawLayers()}
-
                         <FeatureGroup>
-
-                            {/*{drawEditConsole()}*/}
-                            {/*<MyComponent />*/}
-
-
-                            {/*этa падла всё рушит !!!!!!!!!!!!!!!!*/}
-                            {/*{this.DeviceMarkers()}*/}
-
-
                             {this.drawMarkerDrifting()}
                             {this.drawHeatMap()}
                             {this.DrawingPolygonsFromState()}
-
-                            <EditControl
-                                position="topright"
-
-                                onDrawStart={_onDrawStart}
-
-                                onEdited={this._onEdited}
-                                // onCreate={this._onCreate}
-                                onCreated={this._onCreated}
-                                onDeleted={this._onDeleted}
-                                onMounted={this._onMounted}
-                                onEditStart={this._onEditStart}
-                                onEditStop={this._onEditStop}
-                                onDeleteStart={this._onDeleteStart}
-                                onDeleteStop={this._onDeleteStop}
-                                draw={{
-                                    rectangle: false,
-                                }}
-                            />
+                            {this.drawEditConsole()}
                         </FeatureGroup>
                     </MapContainer>
-                {/*</div>*/}
             </div>
         )
     }
