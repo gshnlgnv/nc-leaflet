@@ -1,5 +1,5 @@
 import React from 'react';
-import {FeatureGroup, MapContainer} from "react-leaflet";
+import {FeatureGroup, MapContainer, Polygon} from "react-leaflet";
 import {EditControl} from "react-leaflet-draw";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -45,7 +45,6 @@ class EditConsole extends React.Component {
         const _onDrawStart = (e) => {
             console.log("_onDrawStart", e);
 
-            console.log('open modal >>>');
             this.props.showModal();
         };
 
@@ -57,6 +56,8 @@ class EditConsole extends React.Component {
             // if (layerType === 'polyline') {
             //     console.log(layer);
             // }
+
+            console.log('e',e);
 
             if (layerType === 'polygon') {
                 const {_leaflet_id} = layer;
@@ -71,8 +72,7 @@ class EditConsole extends React.Component {
         }
 
         return (
-            <div>
-                <FeatureGroup>
+                 <FeatureGroup>
                     <EditControl
                         position='topright'
                         onDrawStart={_onDrawStart}
@@ -81,23 +81,30 @@ class EditConsole extends React.Component {
                         // onDeleted={_onDeleted}
                         draw={{
                             // polyline: true,
-                            // rectangle: false,
-                            // circlemarker: false,
-                            // circle: false,
+                            rectangle: false,
+                            circlemarker: false,
+                            circle: false,
+
                             polygon: {
                                 shapeOptions: {
-                                    color: '#97009c',
+                                    color: 'green',
                                     opacity: 0.5,  // polygon border opacity
+                                },
+                                tooltip: {
+                                    start: '- your text-.',
+                                    cont: '- your text-.',
+                                    end: '- your text-.'
                                 }
                             },
+
                             // marker: {
                             //     icon: deviceIcon123,
                             //     title: "device abc",
                             // }
                         }}
                     />
+
                 </FeatureGroup>
-            </div>
         )
     }
 }

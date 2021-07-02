@@ -69,7 +69,6 @@ export const kabinets = [
     }
 ];
 
-
 const exitICON = new L.icon({
     // iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
     iconUrl: exitPNG,

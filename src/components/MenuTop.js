@@ -68,7 +68,7 @@ class MenuTop extends React.Component {
                     </div>
                     <div className='asideMenu__block'>
                         <div className='asideMenu__block_settings' onClick={() => this.enableEditConsole()}>
-                            <img src={settings} alt={'edit'} style={{width: 20, height: 20}}/>
+                            <img src={settings} alt={'edit'} style={{width: 20, height: 20}} title={"Открыть меню редактирования"}/>
                         </div>
                     </div>
                 </div>

@@ -21,6 +21,31 @@ export const PolygonComponent = ({polygons, name, id, deletePol}) => {
             pathOptions={currentColor}
             positions={polygons}
             eventHandlers={eventHandlers}
+            fill={true}
+            fillColor={'green'}
+            fillOpacity={0.5}
+            weight={4}
+
+
+            edit={true}
+            bubblingMouseEvents={true}
+            clickable={true}
+            dashArray={null}
+            dashOffset={null}
+
+
+// fillRule: "evenodd"
+// interactive: true
+// lineCap: "round"
+// lineJoin: "round"
+// maintainColor: false
+// noClip: false
+// opacity: 0.5
+// pane: "overlayPane"
+// smoothFactor: 1
+// stroke: true
+
+
         >
             <Popup>
                 {name} <br/>

@@ -31,9 +31,9 @@ class DeviceMarkers extends React.Component {
 
     render() {
         return (
-            <Fragment>
-                {this.mapDeviceMarkers()}
-            </Fragment>
+                <div>
+                    {this.mapDeviceMarkers()}
+                </div>
         )
     }
 }

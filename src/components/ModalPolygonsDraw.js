@@ -4,6 +4,8 @@ import '../styles/ModalPolygonsDraw.css';
 export const ModalPolygonsDraw = ({active, disable, polygonName}) => {
     let polygonNameRef = React.createRef();
 
+    console.log('modal is on');
+
     return(
         <div className={` ${active ? "modal" : ""} `}>
             <div className='modal__content'>
