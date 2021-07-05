@@ -25,8 +25,6 @@ export const PolygonComponent = ({polygons, name, id, deletePol}) => {
             fillColor={'green'}
             fillOpacity={0.5}
             weight={4}
-
-
             edit={true}
             bubblingMouseEvents={true}
             clickable={true}

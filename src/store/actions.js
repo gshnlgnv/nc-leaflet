@@ -7,7 +7,8 @@ import {
     ENABLE_MARKER_MOVEMENT,
     ENABLE_EDIT_CONSOLE,
     SHOW_MODAL,
-    POLYGON_NAME, DELETE_POLYGON
+    POLYGON_NAME, DELETE_POLYGON,
+    DELETE_SECOND_POLYGON
 } from './consts';
 
 export const addDeviceMarker = (data) => {
@@ -75,3 +76,10 @@ export const deletePolygon = (id) => {
         payload: id,
     }
 }
+
+export const deleteSecondPolygon = (id => {
+    return {
+        type: DELETE_SECOND_POLYGON,
+        payload: id,
+    }
+})

@@ -9,7 +9,15 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import DeviceMarkers from "./DeviceMarkers";
-import {addDeviceMarker, addPolygonLayer, showModal, polygonNameSaving, deletePolygon, deleteMarker} from '../store/actions';
+import {
+    addDeviceMarker,
+    addPolygonLayer,
+    showModal,
+    polygonNameSaving,
+    deletePolygon,
+    deleteMarker,
+    deleteSecondPolygon
+} from '../store/actions';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
 import {HeatmapFunction} from './HeatLayer';
@@ -19,6 +27,7 @@ import EditConsole from './EditConsole';
 import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
 
 import {TEST_DeviceMarkers} from './testMarkers';
+
 
 class MapClass extends React.Component {
     DeviceMarkers = () => {
@@ -39,7 +48,7 @@ class MapClass extends React.Component {
         }
     };
 
-     drawMarkerDrifting = () => {
+    drawMarkerDrifting = () => {
         const {markerMovement} = this.props;
 
         if (markerMovement) {
@@ -47,15 +56,15 @@ class MapClass extends React.Component {
         }
     };
 
-     drawEditConsole = () => {
+    drawEditConsole = () => {
         const {editConsoleSwitch} = this.props;
 
         if (editConsoleSwitch) {
-            return <EditConsole/>;
+            return <EditConsole />;
         }
     }
 
-     drawModal = () => {
+    drawModal = () => {
         const {showModalWindow, showModal, polygonNameSaving} = this.props;
 
         const disableModal = () => {
@@ -94,7 +103,7 @@ class MapClass extends React.Component {
         });
     }
 
-     DrawingPolygonsFromState = () => {
+    DrawingPolygonsFromState = () => {
         const {polygonLayers, currentLayer} = this.props;
 
         if (!polygonLayers) {
@@ -114,7 +123,7 @@ class MapClass extends React.Component {
     }
 
 // drawing polygon with custom button
-     mapEvent(eventing) {
+    mapEvent(eventing) {
         let e = document.createEvent('Event');
 
         e.initEvent('click', true, true);
@@ -124,25 +133,40 @@ class MapClass extends React.Component {
     };
 
     render() {
+        const DeletingDoubledPolygonKostil = () => {
+             const map = useMap();
+
+             const {secondPolygonsID} = this.props;
+
+                for (let key in map._layers) {
+                    if (Number(key) === secondPolygonsID) {
+                        map.removeLayer(map._layers[key]);
+                    }
+                }
+
+            return null;
+        }
+
         return (
             <div className="container">
                 {this.drawModal()}
-                    <MapContainer
-                        center={[35, 50]}
-                        zoom={5}
-                        style={{height: "100vh", width: "100%"}}
-                        scrollWheelZoom={true}
-                        zoomControl={false}
-                    >
-                        <MenuTop/>
-                        {this.drawLayers()}
-                        <FeatureGroup>
-                            {this.drawMarkerDrifting()}
-                            {this.drawHeatMap()}
-                            {this.DrawingPolygonsFromState()}
-                            {this.drawEditConsole()}
-                        </FeatureGroup>
-                    </MapContainer>
+                <MapContainer
+                    center={[35, 50]}
+                    zoom={5}
+                    style={{height: "100vh", width: "100%"}}
+                    scrollWheelZoom={true}
+                    zoomControl={false}
+                >
+                    <MenuTop/>
+                    {this.drawLayers()}
+                    <DeletingDoubledPolygonKostil/>
+                    <FeatureGroup>
+                        {this.drawMarkerDrifting()}
+                        {this.drawHeatMap()}
+                        {this.DrawingPolygonsFromState()}
+                        {this.drawEditConsole()}
+                    </FeatureGroup>
+                </MapContainer>
             </div>
         )
     }
@@ -158,11 +182,20 @@ const mapStateToProps = (state) => {
         markerMovement: state.dataReducer.markerMovement,
         editConsoleSwitch: state.dataReducer.editConsole,
         showModalWindow: state.dataReducer.showModalWindow,
+        secondPolygonsID: state.dataReducer.secondPolygonsID,
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({addDeviceMarker, addPolygonLayer, showModal, polygonNameSaving, deletePolygon, deleteMarker}, dispatch)
+    return bindActionCreators({
+        addDeviceMarker,
+        addPolygonLayer,
+        showModal,
+        polygonNameSaving,
+        deletePolygon,
+        deleteMarker,
+        deleteSecondPolygon
+    }, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapClass);

@@ -4,17 +4,16 @@ import '../styles/ModalPolygonsDraw.css';
 export const ModalPolygonsDraw = ({active, disable, polygonName}) => {
     let polygonNameRef = React.createRef();
 
-    console.log('modal is on');
-
     return(
-        <div className={` ${active ? "modal" : ""} `}>
+        <div className={` ${active ? "modal active" : "modal"} `}>
             <div className='modal__content'>
-                <span>modal</span>
-                <input type='text' placeholder='input polygon name' ref={polygonNameRef}/>
+                <p>Введите имя нового полигона</p>
+                <input type='text' placeholder='Название...' ref={polygonNameRef}/>
                 <button onClick={ () => {
                     polygonName(polygonNameRef.current.value);
                     disable();
-                }}>save & close modal</button>
+                }}>Сохранить и выйти</button>
+                <p className='modal__information'>* Отменить отрисовку полигона можно будет после закрытия этого окна</p>
             </div>
         </div>
     )

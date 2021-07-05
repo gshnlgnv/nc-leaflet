@@ -8,7 +8,8 @@ import {
     ENABLE_EDIT_CONSOLE,
     SHOW_MODAL,
     POLYGON_NAME,
-    DELETE_POLYGON
+    DELETE_POLYGON,
+    DELETE_SECOND_POLYGON
 } from './consts';
 import {kabinets, markers} from "./polygons";
 
@@ -28,6 +29,7 @@ const initialState = {
     editConsole: false,
     showModalWindow: false,
     polygonName: null,
+    secondPolygonsID: null,
 }
 
 export const dataReducer = (state = initialState, action) => {
@@ -90,6 +92,11 @@ export const dataReducer = (state = initialState, action) => {
             return {
                 ...state,
                 polygonLayers: state.polygonLayers.filter(item => item.id !== action.payload)
+            }
+        case DELETE_SECOND_POLYGON:
+            return {
+                ...state,
+                secondPolygonsID: action.payload,
             }
         default:
             return state;

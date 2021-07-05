@@ -1,5 +1,5 @@
 .asideMenu {
-  position: relative;
+  position: absolute;
   display: flex;
   flex-direction: row;
   min-height: 52px;

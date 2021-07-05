@@ -6,14 +6,30 @@
   top: 0;
   left: 0;
   z-index: 3610;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: 1s;
+}
+
+.active {
+  opacity: 1;
 }
 
 .modal__content {
+  padding: 20px;
+  margin-left: 50px;
+  margin-right: 50px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
   border-radius: 10px;
   background-color: white;
+}
+
+.modal__information {
+  font-style: italic;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 /*# sourceMappingURL=ModalPolygonsDraw.css.map */

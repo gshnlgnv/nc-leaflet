@@ -2,8 +2,10 @@ import React from 'react';
 import {EditControl} from "react-leaflet-draw";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showModal, addPolygonLayer} from '../store/actions';
+import {showModal, addPolygonLayer, deleteSecondPolygon} from '../store/actions';
 import deviceIcon from "../pics/microchip.png";
+
+import L from 'leaflet';
 
 class EditConsole extends React.Component {
     _onEditStart = (e) => {
@@ -20,6 +22,7 @@ class EditConsole extends React.Component {
         console.log("deleted");
     }
 
+    // перехват входящих точек нового полигона
      coordinatesArray = (incoming) => {
         let result = [];
 
@@ -38,6 +41,9 @@ class EditConsole extends React.Component {
         if (layerType === 'polygon') {
             const {_leaflet_id} = layer;
 
+            // отправка ID ненужного полигона
+            this.props.deleteSecondPolygon(_leaflet_id);
+
             this.props.addPolygonLayer({
                 id: _leaflet_id,
                 mapLocation: currentLayer,
@@ -48,10 +54,9 @@ class EditConsole extends React.Component {
     }
 
     render() {
-        // names for standart leaflet buttons
-        L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон1';
-        L.drawLocal.draw.toolbar.buttons.polyline = 'Нарисовать линию1';
-        L.drawLocal.draw.toolbar.buttons.marker = 'Поставить маркер1';
+          // names for standart leaflet buttons
+        L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
+        L.drawLocal.draw.toolbar.buttons.marker = 'Поставить маркер';
 
         const _onDrawStart = (e) => {
             console.log("_onDrawStart", e);
@@ -72,7 +77,6 @@ class EditConsole extends React.Component {
                 position="topright"
                 onDrawStart={_onDrawStart}
                 onEdited={this._onEdited}
-                // onCreate={this._onCreate}
                 onCreated={this._onCreated}
                 onDeleted={this._onDeleted}
                 onMounted={this._onMounted}
@@ -82,6 +86,10 @@ class EditConsole extends React.Component {
                 onDeleteStop={this._onDeleteStop}
                 draw={{
                     rectangle: false,
+                    polyline: false,
+                    circle: false,
+                    circlemarker: false,
+                    marker: false,
                 }}
             />
         )
@@ -97,7 +105,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({showModal, addPolygonLayer}, dispatch)
+    return bindActionCreators({showModal, addPolygonLayer, deleteSecondPolygon}, dispatch)
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditConsole);
