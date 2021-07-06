@@ -2,7 +2,6 @@ import React from 'react';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import '../styles/MapClass.css';
-import medcentrLogo from '../pics/almazova_logo_text.png';
 import {
     addDeviceMarker,
     addPolygonLayer,
@@ -12,7 +11,7 @@ import {
     deleteMarker,
     deleteSecondPolygon
 } from '../store/dataSlicer';
-import {MapContainer, ImageOverlay, useMap, FeatureGroup, Polygon} from 'react-leaflet';
+import {MapContainer, ImageOverlay, useMap, FeatureGroup} from 'react-leaflet';
 import {connect} from 'react-redux';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
@@ -21,31 +20,18 @@ import Drifting from './Drifting';
 import MenuTop from "./MenuTop";
 import EditConsole from './EditConsole';
 import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
+import medcentrLogo from '../pics/almazova_logo_text.png';
 
 class MapClass extends React.Component {
     drawHeatMap() {
         const {heatMap, currentLayer} = this.props;
 
-        if (currentLayer) {
-            return <HeatmapFunction floor={currentLayer} activeHeat={heatMap}/>
-        }
+        return currentLayer ? <HeatmapFunction floor={currentLayer} activeHeat={heatMap}/> : null;
     };
 
-    drawMarkerDrifting = () => {
-        const {markerMovement} = this.props;
+    drawMarkerDrifting = () => this.props.markerMovement ? <Drifting markerMovement={this.props.markerMovement}/> : null;
 
-        if (markerMovement) {
-            return <Drifting markerMovement={markerMovement}/>
-        }
-    };
-
-    drawEditConsole = () => {
-        const {editConsoleSwitch} = this.props;
-
-        if (editConsoleSwitch) {
-            return <EditConsole/>;
-        }
-    }
+    drawEditConsole = () => this.props.editConsoleSwitch ? <EditConsole/> : null;
 
     drawModal = () => {
         const {showModalWindow, showModal, polygonName} = this.props;
@@ -54,7 +40,7 @@ class MapClass extends React.Component {
             showModal();
         }
 
-        const fixPolygonName = (name) => {
+        const setPolygonName = (name) => {
             polygonName(name);
         }
 
@@ -62,7 +48,7 @@ class MapClass extends React.Component {
             <ModalPolygonsDraw
                 active={showModalWindow}
                 disable={disableModal}
-                polygonName={fixPolygonName}
+                polygonName={setPolygonName}
             /> : null;
     }
 
@@ -86,7 +72,7 @@ class MapClass extends React.Component {
         });
     }
 
-    DrawingPolygonsFromState = () => {
+    drawPolygons = () => {
         const {polygonLayers, currentLayer} = this.props;
 
         if (!polygonLayers) {
@@ -99,21 +85,10 @@ class MapClass extends React.Component {
 
         return polygonLayers.map(({'id': id, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
             if (floor === currentLayer) {
-
                 return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol}/>
             }
         });
     }
-
-// drawing polygon with custom button
-    mapEvent(eventing) {
-        let e = document.createEvent('Event');
-
-        e.initEvent('click', true, true);
-        let cb = document.getElementsByClassName('leaflet-draw-draw-polygon');
-
-        return !cb[0].dispatchEvent(e);
-    };
 
     render() {
         const DeletingDoubledPolygonKostil = () => {
@@ -147,7 +122,7 @@ class MapClass extends React.Component {
                         {/*{this.drawDeviceMarkers()}*/}
                         {this.drawMarkerDrifting()}
                         {this.drawHeatMap()}
-                        {this.DrawingPolygonsFromState()}
+                        {this.drawPolygons()}
                         {this.drawEditConsole()}
                     </FeatureGroup>
                 </MapContainer>

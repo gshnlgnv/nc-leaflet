@@ -30,20 +30,6 @@ export const PolygonComponent = ({polygons, name, id, deletePol}) => {
             clickable={true}
             dashArray={null}
             dashOffset={null}
-
-
-// fillRule: "evenodd"
-// interactive: true
-// lineCap: "round"
-// lineJoin: "round"
-// maintainColor: false
-// noClip: false
-// opacity: 0.5
-// pane: "overlayPane"
-// smoothFactor: 1
-// stroke: true
-
-
         >
             <Popup>
                 {name} <br/>

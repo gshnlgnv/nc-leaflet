@@ -1,16 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import '../styles/MenuTop.css';
-import medcentrLogo from "../pics/unnamed.jpg";
-import settings from '../pics/settings.png';
-
 import {
     checkingLayer,
     enableHeatLayer,
     enableMarkerMovement,
     enableEditConsole
 } from '../store/dataSlicer';
-
+import medcentrLogo from "../pics/unnamed.jpg";
+import settings from '../pics/settings.png';
 
 class MenuTop extends React.Component {
     constructor() {

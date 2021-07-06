@@ -8,7 +8,7 @@ import almazov_3 from "../pics/almazov_3.png";
 
 export const kabinets = [
     {
-        "id": 161,
+        "id": 101,
         "mapLocation": '1F',
         "roomName": 'Компната успеха',
         'color': 'red',
@@ -33,7 +33,7 @@ export const kabinets = [
             ]
     },
     {
-        "id": 88,
+        "id": 102,
         "mapLocation": '1F',
         "roomName": 'Компната дзена',
         "latlngs": [
@@ -45,7 +45,7 @@ export const kabinets = [
         ]
     },
     {
-        "id": 86,
+        "id": 103,
         "mapLocation": '2F',
         "roomName": 'Компната капитана',
         "latlngs": [
@@ -57,7 +57,7 @@ export const kabinets = [
         ]
     },
     {
-        "id": 86,
+        "id": 104,
         "mapLocation": '3F',
         "roomName": 'Компната капитана',
         "latlngs": [

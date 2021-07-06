@@ -1,27 +1,19 @@
 import React from 'react';
 import {EditControl} from "react-leaflet-draw";
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-// import {showModal, addPolygonLayer, deleteSecondPolygon} from '../store/actions';
-import deviceIcon from "../pics/microchip.png";
-
-import { showModal, addPolygonLayer, deleteSecondPolygon} from '../store/dataSlicer';
-
 import L from 'leaflet';
+import { showModal, addPolygonLayer, deleteSecondPolygon} from '../store/dataSlicer';
 
 class EditConsole extends React.Component {
     _onEditStart = (e) => {
         console.log('_onEditStart', e);
     };
 
-    // actions on editing layer
-     _onEditPath = (e) => {
-        console.log("editing");
-    }
+    _onEditStop = (e) => {
+        console.log('_onEditStop', e);
 
-    // actions on deleting layer
-     _onDeleted = (e) => {
-        console.log("deleted");
+        // how to get polygon id????
+        console.log('updated coord:', e.target._layers);
     }
 
     // перехват входящих точек нового полигона
@@ -62,30 +54,16 @@ class EditConsole extends React.Component {
 
         const _onDrawStart = (e) => {
             console.log("_onDrawStart", e);
-
             this.props.showModal();
         };
-
-        // custom marker icon
-        let deviceIcon123 = L.icon({
-            iconUrl: deviceIcon,
-            iconSize: [25, 41],
-            iconAnchor: [10, 41],
-            popupAnchor: [2, -40],
-        });
 
         return (
             <EditControl
                 position="topright"
                 onDrawStart={_onDrawStart}
-                onEdited={this._onEdited}
                 onCreated={this._onCreated}
-                onDeleted={this._onDeleted}
-                onMounted={this._onMounted}
                 onEditStart={this._onEditStart}
                 onEditStop={this._onEditStop}
-                onDeleteStart={this._onDeleteStart}
-                onDeleteStop={this._onDeleteStop}
                 draw={{
                     rectangle: false,
                     polyline: false,
@@ -98,18 +76,12 @@ class EditConsole extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        currentLayer: state.dataReducer.currentLayer,
-        showModalWindow: state.dataReducer.showModalWindow,
-        polygonName: state.dataReducer.polygonName,
-    }
-};
+const mapStateToProps = (state) => ({
+    currentLayer: state.dataReducer.currentLayer,
+    showModalWindow: state.dataReducer.showModalWindow,
+    polygonName: state.dataReducer.polygonName,
+});
 
 const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon};
-
-// const mapDispatchToProps = (dispatch) => {
-//     return bindActionCreators({showModal, addPolygonLayer, deleteSecondPolygon}, dispatch)
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditConsole);

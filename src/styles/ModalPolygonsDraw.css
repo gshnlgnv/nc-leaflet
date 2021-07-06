@@ -27,6 +27,18 @@
   background-color: white;
 }
 
+.modal__content_text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.modal_block {
+  margin-top: 15px;
+}
+
 .modal__information {
   font-style: italic;
   color: rgba(0, 0, 0, 0.5);
