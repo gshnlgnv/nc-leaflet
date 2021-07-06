@@ -1,54 +1,61 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import {Marker, Popup} from "react-leaflet";
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-// import {deleteMarker} from '../store/actions';
 
-import {deleteMarker} from '../store/dataSlicer';
-
-class DeviceMarkers extends React.Component {
-    mapDeviceMarkers() {
-        const {deviceMarkers, currentLayer} = this.props;
-
-        return Object.entries(deviceMarkers).map(([id, deviceInfo]) => {
-             if (deviceInfo.floor === currentLayer) {
-                 return <Marker
-                     key={deviceInfo.key}
-                     position={deviceInfo.position}
-                     icon={deviceInfo.icon}
-                     draggable={deviceInfo.draggable}
-                     autoPan={deviceInfo.autoPan}
-                 >
-                     <Popup>
-                         {deviceInfo.content}
-                         <button title="edit" onClick={() => console.log('edit')}>edit</button>
-                         <button title="delete" onClick={() => {
-                             this.props.deleteMarker(deviceInfo.key)
-                         } }>x</button>
-                     </Popup>
-                 </Marker>
-             }
-        });
+export const TEST_DeviceMarkers = ( {deviceMarkers, currentLayer, deleteMarker}) => {
+    if (currentLayer) {
+        return deviceMarkers.map(marker => {
+            if (marker.floor === currentLayer) {
+                return <Marker
+                    key={marker.key}
+                    position={marker.position}
+                    icon={marker.icon}
+                    draggable={marker.draggable}
+                    autoPan={marker.autoPan}
+                >
+                    <Popup>
+                        {marker.content}
+                        <button title="edit" onClick={() => console.log('edit')}>edit</button>
+                        <button title="delete" onClick={() => {
+                            deleteMarker(marker.key)
+                        }}>
+                            x
+                        </button>
+                    </Popup>
+                </Marker>
+            }
+        })
     }
 
-    render() {
-        return (
-                <div>
-                    {this.mapDeviceMarkers()}
-                </div>
-        )
-    }
+    return null;
 }
-
-const mapStateToProps = (state) => {
-    return {
-        deviceMarkers: state.dataReducer.deviceMarkers,
-        currentLayer: state.dataReducer.currentLayer,
-    }
-};
-
-const mapDispatchToProps = {
-   deleteMarker
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DeviceMarkers);
+//
+// import React from 'react';
+// import {Marker, Popup} from "react-leaflet";
+//
+// export const TEST_DeviceMarkers = ( {deviceMarkers, currentLayer, deleteMarker}) => {
+//     if (currentLayer) {
+//         return deviceMarkers.map(marker => {
+//             if (marker.floor === currentLayer) {
+//                 return <Marker
+//                     key={marker.key}
+//                     position={marker.position}
+//                     icon={marker.icon}
+//                     draggable={marker.draggable}
+//                     autoPan={marker.autoPan}
+//                 >
+//                     <Popup>
+//                         {marker.content}
+//                         <button title="edit" onClick={() => console.log('edit')}>edit</button>
+//                         <button title="delete" onClick={() => {
+//                             deleteMarker(marker.key)
+//                         }}>
+//                             x
+//                         </button>
+//                     </Popup>
+//                 </Marker>
+//             }
+//         })
+//     }
+//
+//     return null;
+// }

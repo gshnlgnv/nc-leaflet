@@ -3,7 +3,6 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import '../styles/MapClass.css';
 import medcentrLogo from '../pics/almazova_logo_text.png';
-
 import {
     addDeviceMarker,
     addPolygonLayer,
@@ -13,23 +12,8 @@ import {
     deleteMarker,
     deleteSecondPolygon
 } from '../store/dataSlicer';
-
-import {MapContainer, ImageOverlay, useMapEvents, useMap, FeatureGroup, Polygon} from 'react-leaflet';
-import {bindActionCreators} from 'redux';
+import {MapContainer, ImageOverlay, useMap, FeatureGroup, Polygon} from 'react-leaflet';
 import {connect} from 'react-redux';
-
-// import DeviceMarkers from "./DeviceMarkers";
-
-// import {
-//     addDeviceMarker,
-//     addPolygonLayer,
-//     showModal,
-//     polygonNameSaving,
-//     deletePolygon,
-//     deleteMarker,
-//     deleteSecondPolygon
-// } from '../store/actions';
-
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
 import {HeatmapFunction} from './HeatLayer';
@@ -38,20 +22,7 @@ import MenuTop from "./MenuTop";
 import EditConsole from './EditConsole';
 import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
 
-import {TEST_DeviceMarkers} from './testMarkers';
-
-
 class MapClass extends React.Component {
-    DeviceMarkers = () => {
-        const {currentLayer, deviceMarkers, deleteMarker} = this.props;
-
-        return currentLayer ? <TEST_DeviceMarkers
-            deviceMarkers={deviceMarkers}
-            currentLayer={currentLayer}
-            deleteMarker={deleteMarker}
-        /> : null;
-    }
-
     drawHeatMap() {
         const {heatMap, currentLayer} = this.props;
 
@@ -173,6 +144,7 @@ class MapClass extends React.Component {
                     {this.drawLayers()}
                     <DeletingDoubledPolygonKostil/>
                     <FeatureGroup>
+                        {/*{this.drawDeviceMarkers()}*/}
                         {this.drawMarkerDrifting()}
                         {this.drawHeatMap()}
                         {this.DrawingPolygonsFromState()}
@@ -199,20 +171,6 @@ const mapStateToProps = (state) => (
     }
 )
 
-// const mapStateToProps = (state) => {
-//     return {
-//         deviceMarkers: state.dataReducer.deviceMarkers,
-//         polygonLayers: state.dataReducer.polygonLayers,
-//         markerPositions: state.dataReducer.deviceMarkers,
-//         currentLayer: state.dataReducer.currentLayer,
-//         heatMap: state.dataReducer.heatMap,
-//         markerMovement: state.dataReducer.markerMovement,
-//         editConsoleSwitch: state.dataReducer.editConsole,
-//         showModalWindow: state.dataReducer.showModalWindow,
-//         secondPolygonsID: state.dataReducer.secondPolygonsID,
-//     }
-// };
-
 const mapDispatchToProps = {
     addDeviceMarker,
     addPolygonLayer,
@@ -222,16 +180,5 @@ const mapDispatchToProps = {
     deleteMarker,
     deleteSecondPolygon
 };
-// const mapDispatchToProps = (dispatch) => {
-//     return bindActionCreators({
-//         addDeviceMarker,
-//         addPolygonLayer,
-//         showModal,
-//         polygonNameSaving,
-//         deletePolygon,
-//         deleteMarker,
-//         deleteSecondPolygon
-//     }, dispatch)
-// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapClass);

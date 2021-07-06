@@ -1,7 +1,5 @@
 import React from 'react';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-// import {layerTypeChecking, enableHeatLayer, actionMarkerMovement, enableEdit} from '../store/actions';
 import '../styles/MenuTop.css';
 import medcentrLogo from "../pics/unnamed.jpg";
 import settings from '../pics/settings.png';
@@ -86,9 +84,5 @@ class MenuTop extends React.Component {
 }
 
 const mapDispatchToProps = {checkingLayer, enableHeatLayer, enableMarkerMovement, enableEditConsole};
-
-// const mapDispatchToProps = (dispatch) => {
-//     return bindActionCreators({layerTypeChecking, enableHeatLayer, actionMarkerMovement, enableEdit}, dispatch)
-// };
 
 export default connect(null, mapDispatchToProps)(MenuTop);
