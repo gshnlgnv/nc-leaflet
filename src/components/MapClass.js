@@ -4,20 +4,32 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import '../styles/MapClass.css';
 import medcentrLogo from '../pics/almazova_logo_text.png';
 
-import {MapContainer, ImageOverlay, useMapEvents, useMap, FeatureGroup, Polygon} from 'react-leaflet';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-
-import DeviceMarkers from "./DeviceMarkers";
 import {
     addDeviceMarker,
     addPolygonLayer,
     showModal,
-    polygonNameSaving,
+    polygonName,
     deletePolygon,
     deleteMarker,
     deleteSecondPolygon
-} from '../store/actions';
+} from '../store/dataSlicer';
+
+import {MapContainer, ImageOverlay, useMapEvents, useMap, FeatureGroup, Polygon} from 'react-leaflet';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+// import DeviceMarkers from "./DeviceMarkers";
+
+// import {
+//     addDeviceMarker,
+//     addPolygonLayer,
+//     showModal,
+//     polygonNameSaving,
+//     deletePolygon,
+//     deleteMarker,
+//     deleteSecondPolygon
+// } from '../store/actions';
+
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
 import {HeatmapFunction} from './HeatLayer';
@@ -60,19 +72,19 @@ class MapClass extends React.Component {
         const {editConsoleSwitch} = this.props;
 
         if (editConsoleSwitch) {
-            return <EditConsole />;
+            return <EditConsole/>;
         }
     }
 
     drawModal = () => {
-        const {showModalWindow, showModal, polygonNameSaving} = this.props;
+        const {showModalWindow, showModal, polygonName} = this.props;
 
         const disableModal = () => {
             showModal();
         }
 
         const fixPolygonName = (name) => {
-            polygonNameSaving(name);
+            polygonName(name);
         }
 
         return showModalWindow ?
@@ -134,15 +146,15 @@ class MapClass extends React.Component {
 
     render() {
         const DeletingDoubledPolygonKostil = () => {
-             const map = useMap();
+            const map = useMap();
 
-             const {secondPolygonsID} = this.props;
+            const {secondPolygonsID} = this.props;
 
-                for (let key in map._layers) {
-                    if (Number(key) === secondPolygonsID) {
-                        map.removeLayer(map._layers[key]);
-                    }
+            for (let key in map._layers) {
+                if (Number(key) === secondPolygonsID) {
+                    map.removeLayer(map._layers[key]);
                 }
+            }
 
             return null;
         }
@@ -172,8 +184,9 @@ class MapClass extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
+
+const mapStateToProps = (state) => (
+    {
         deviceMarkers: state.dataReducer.deviceMarkers,
         polygonLayers: state.dataReducer.polygonLayers,
         markerPositions: state.dataReducer.deviceMarkers,
@@ -184,18 +197,41 @@ const mapStateToProps = (state) => {
         showModalWindow: state.dataReducer.showModalWindow,
         secondPolygonsID: state.dataReducer.secondPolygonsID,
     }
-};
+)
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-        addDeviceMarker,
-        addPolygonLayer,
-        showModal,
-        polygonNameSaving,
-        deletePolygon,
-        deleteMarker,
-        deleteSecondPolygon
-    }, dispatch)
+// const mapStateToProps = (state) => {
+//     return {
+//         deviceMarkers: state.dataReducer.deviceMarkers,
+//         polygonLayers: state.dataReducer.polygonLayers,
+//         markerPositions: state.dataReducer.deviceMarkers,
+//         currentLayer: state.dataReducer.currentLayer,
+//         heatMap: state.dataReducer.heatMap,
+//         markerMovement: state.dataReducer.markerMovement,
+//         editConsoleSwitch: state.dataReducer.editConsole,
+//         showModalWindow: state.dataReducer.showModalWindow,
+//         secondPolygonsID: state.dataReducer.secondPolygonsID,
+//     }
+// };
+
+const mapDispatchToProps = {
+    addDeviceMarker,
+    addPolygonLayer,
+    showModal,
+    polygonName,
+    deletePolygon,
+    deleteMarker,
+    deleteSecondPolygon
 };
+// const mapDispatchToProps = (dispatch) => {
+//     return bindActionCreators({
+//         addDeviceMarker,
+//         addPolygonLayer,
+//         showModal,
+//         polygonNameSaving,
+//         deletePolygon,
+//         deleteMarker,
+//         deleteSecondPolygon
+//     }, dispatch)
+// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapClass);

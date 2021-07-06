@@ -2,8 +2,10 @@ import React from 'react';
 import {EditControl} from "react-leaflet-draw";
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {showModal, addPolygonLayer, deleteSecondPolygon} from '../store/actions';
+// import {showModal, addPolygonLayer, deleteSecondPolygon} from '../store/actions';
 import deviceIcon from "../pics/microchip.png";
+
+import { showModal, addPolygonLayer, deleteSecondPolygon} from '../store/dataSlicer';
 
 import L from 'leaflet';
 
@@ -36,15 +38,15 @@ class EditConsole extends React.Component {
     // конец рисования
      _onCreated = (e) => {
         const {layerType, layer} = e;
-        const {currentLayer, polygonName} = this.props;
+        const {currentLayer, polygonName, deleteSecondPolygon, addPolygonLayer} = this.props;
 
         if (layerType === 'polygon') {
             const {_leaflet_id} = layer;
 
             // отправка ID ненужного полигона
-            this.props.deleteSecondPolygon(_leaflet_id);
+            deleteSecondPolygon(_leaflet_id);
 
-            this.props.addPolygonLayer({
+            addPolygonLayer({
                 id: _leaflet_id,
                 mapLocation: currentLayer,
                 roomName: polygonName,
@@ -104,8 +106,10 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({showModal, addPolygonLayer, deleteSecondPolygon}, dispatch)
-};
+const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon};
+
+// const mapDispatchToProps = (dispatch) => {
+//     return bindActionCreators({showModal, addPolygonLayer, deleteSecondPolygon}, dispatch)
+// };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditConsole);

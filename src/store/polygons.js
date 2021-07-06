@@ -1,3 +1,4 @@
+import L from 'leaflet';
 import waterPNG from '../pics/water.png';
 import wcPNG from '../pics/wc-sign.png';
 import exitPNG from '../pics/exit.png';

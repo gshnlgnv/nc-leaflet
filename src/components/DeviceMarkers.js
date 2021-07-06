@@ -2,7 +2,9 @@ import React, {Fragment} from 'react';
 import {Marker, Popup} from "react-leaflet";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {deleteMarker} from '../store/actions';
+// import {deleteMarker} from '../store/actions';
+
+import {deleteMarker} from '../store/dataSlicer';
 
 class DeviceMarkers extends React.Component {
     mapDeviceMarkers() {
@@ -45,8 +47,8 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({deleteMarker}, dispatch);
+const mapDispatchToProps = {
+   deleteMarker
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeviceMarkers);
