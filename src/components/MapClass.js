@@ -63,6 +63,7 @@ class MapClass extends React.Component {
         return mapLayers.map((layer, index) => {
             if (layer.floor === currentLayer) {
                 return <ImageOverlay
+                    _floor={layer.floor}
                     key={index}
                     attribution={layer.attr}
                     url={layer.url}
@@ -83,9 +84,9 @@ class MapClass extends React.Component {
             this.props.deletePolygon(id);
         }
 
-        return polygonLayers.map(({'id': id, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
+        return polygonLayers.map(({'id': id, 'superID': superID, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
             if (floor === currentLayer) {
-                return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol}/>
+                return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol} superID={superID}/>
             }
         });
     }

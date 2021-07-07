@@ -47,6 +47,13 @@ const dataReducerSlice = createSlice({
         },
         deleteMarker(state,action) {
             state.deviceMarkers = state.deviceMarkers.filter(item => item.key !== action.payload)
+        },
+        editingPolygonCoordinates(state, action) {
+            state.polygonLayers.map( pol => {
+                if (pol.superID === action.payload.id) {
+                    pol.latlngs = action.payload.coord;
+                }
+            })
         }
     },
 })
@@ -62,7 +69,8 @@ export const {
     polygonName,
     deletePolygon,
     deleteSecondPolygon,
-    deleteMarker
+    deleteMarker,
+    editingPolygonCoordinates
 } = dataReducerSlice.actions;
 
 export default dataReducerSlice.reducer;

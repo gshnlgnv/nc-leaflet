@@ -2,7 +2,8 @@ import React from 'react';
 import {EditControl} from "react-leaflet-draw";
 import {connect} from 'react-redux';
 import L from 'leaflet';
-import { showModal, addPolygonLayer, deleteSecondPolygon} from '../store/dataSlicer';
+import { showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates} from '../store/dataSlicer';
+import {mapLayers} from '../store/polygons';
 
 class EditConsole extends React.Component {
     _onEditStart = (e) => {
@@ -12,8 +13,41 @@ class EditConsole extends React.Component {
     _onEditStop = (e) => {
         console.log('_onEditStop', e);
 
-        // how to get polygon id????
-        console.log('updated coord:', e.target._layers);
+       const leafletEditingLayer = e.sourceTarget.attributionControl._attributions;
+       let layerAttribtuteName = '';
+
+       for (let key in leafletEditingLayer) {
+           layerAttribtuteName = key;
+       }
+
+       let floorKey = '';
+
+        mapLayers.map( item => {
+            if (item.attr === layerAttribtuteName) {
+                floorKey = item.floor;
+            }
+        })
+
+        const {polygonLayers, editingPolygonCoordinates} = this.props;
+        const editedLayers = e.sourceTarget._layers;
+
+        let polygonsUpdatedCoordinates = {};
+
+        for (let key in editedLayers) {
+            if (editedLayers[key].options._superID) {
+                polygonsUpdatedCoordinates[editedLayers[key].options._superID] = editedLayers[key].editing.latlngs[0][0].map( coordinates => {
+                        return [coordinates.lat, coordinates.lng];
+                    })
+            }
+        }
+
+        for (let key in polygonsUpdatedCoordinates) {
+            for (let i = 0 ; i < polygonLayers.length; i++) {
+                if (polygonLayers[i].superID === key) {
+                    editingPolygonCoordinates({id: polygonLayers[i].superID, coord: polygonsUpdatedCoordinates[key]})
+                }
+            }
+        }
     }
 
     // перехват входящих точек нового полигона
@@ -40,6 +74,7 @@ class EditConsole extends React.Component {
 
             addPolygonLayer({
                 id: _leaflet_id,
+                superID: `${currentLayer}${_leaflet_id}`,
                 mapLocation: currentLayer,
                 roomName: polygonName,
                 latlngs: this.coordinatesArray(layer.getLatLngs()[0])
@@ -80,8 +115,9 @@ const mapStateToProps = (state) => ({
     currentLayer: state.dataReducer.currentLayer,
     showModalWindow: state.dataReducer.showModalWindow,
     polygonName: state.dataReducer.polygonName,
+    polygonLayers: state.dataReducer.polygonLayers,
 });
 
-const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon};
+const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditConsole);
