@@ -131,6 +131,21 @@ export const markers = [
     },
 ];
 
+export const markersNew = [
+    {
+        id: "1a",
+        mapLocation: '1F',
+        markerName: "1a",
+        latlngs: [18.716980451169885, 33.83789062500001],
+    },
+    {
+        id: "1b",
+        mapLocation: '2F',
+        markerName: "1b",
+        latlngs: [19.132780998205387, 43.33007812500001],
+    }
+];
+
 export const mapLayers = [
     {
         floor: '1F',

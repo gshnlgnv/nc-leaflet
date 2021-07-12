@@ -11,7 +11,7 @@ import {
     deleteMarker,
     deleteSecondPolygon
 } from '../store/dataSlicer';
-import {MapContainer, ImageOverlay, useMap, FeatureGroup} from 'react-leaflet';
+import {MapContainer, ImageOverlay, useMap, FeatureGroup, Popup, Marker} from 'react-leaflet';
 import {connect} from 'react-redux';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
@@ -21,6 +21,8 @@ import MenuTop from "./MenuTop";
 import EditConsole from './EditConsole';
 import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
 import medcentrLogo from '../pics/almazova_logo_text.png';
+import L from "leaflet";
+import wcPNG from "../pics/wc-sign.png";
 
 class MapClass extends React.Component {
     drawHeatMap() {
@@ -84,9 +86,36 @@ class MapClass extends React.Component {
             this.props.deletePolygon(id);
         }
 
+
         return polygonLayers.map(({'id': id, 'superID': superID, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
             if (floor === currentLayer) {
                 return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol} superID={superID}/>
+            }
+        });
+    }
+
+    drawMarkers = () => {
+        const {myMarkers, currentLayer} = this.props;
+
+        // const iicon = new L.icon({
+        //     // iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
+        //     iconUrl: wcPNG,
+        //     iconSize: [25, 41],
+        //     iconAnchor: [10, 41],
+        //     popupAnchor: [2, -40]
+        // });
+
+        return myMarkers.map( ({mapLocation, latlngs, markerName, icon}, index) => {
+            if (mapLocation === currentLayer) {
+                return(
+                    <Marker
+                        key={index}
+                        position={latlngs}
+                        // icon={iicon}
+                    >
+                        <Popup>{markerName}</Popup>
+                    </Marker>
+                )
             }
         });
     }
@@ -120,11 +149,11 @@ class MapClass extends React.Component {
                     {this.drawLayers()}
                     <DeletingDoubledPolygonKostil/>
                     <FeatureGroup>
-                        {/*{this.drawDeviceMarkers()}*/}
                         {this.drawMarkerDrifting()}
                         {this.drawHeatMap()}
                         {this.drawPolygons()}
                         {this.drawEditConsole()}
+                        {this.drawMarkers()}
                     </FeatureGroup>
                 </MapContainer>
             </div>
@@ -136,6 +165,7 @@ class MapClass extends React.Component {
 const mapStateToProps = (state) => (
     {
         deviceMarkers: state.dataReducer.deviceMarkers,
+        myMarkers: state.dataReducer.myMarkers,
         polygonLayers: state.dataReducer.polygonLayers,
         markerPositions: state.dataReducer.deviceMarkers,
         currentLayer: state.dataReducer.currentLayer,

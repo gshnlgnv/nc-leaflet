@@ -2,7 +2,7 @@ import React from 'react';
 import {EditControl} from "react-leaflet-draw";
 import {connect} from 'react-redux';
 import L from 'leaflet';
-import { showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates} from '../store/dataSlicer';
+import { showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates, addMyMarker} from '../store/dataSlicer';
 import {mapLayers} from '../store/polygons';
 
 class EditConsole extends React.Component {
@@ -30,7 +30,6 @@ class EditConsole extends React.Component {
 
         const {polygonLayers, editingPolygonCoordinates} = this.props;
         const editedLayers = e.sourceTarget._layers;
-
         let polygonsUpdatedCoordinates = {};
 
         for (let key in editedLayers) {
@@ -65,6 +64,18 @@ class EditConsole extends React.Component {
      _onCreated = (e) => {
         const {layerType, layer} = e;
         const {currentLayer, polygonName, deleteSecondPolygon, addPolygonLayer} = this.props;
+
+        if (layerType === 'marker') {
+            const {_leaflet_id} = layer;
+            const {addMyMarker} = this.props;
+
+            addMyMarker({
+                id: _leaflet_id,
+                mapLocation: currentLayer,
+                markerName: polygonName,
+                latlngs: [layer._latlng.lat, layer._latlng.lng]
+            });
+        }
 
         if (layerType === 'polygon') {
             const {_leaflet_id} = layer;
@@ -104,7 +115,6 @@ class EditConsole extends React.Component {
                     polyline: false,
                     circle: false,
                     circlemarker: false,
-                    marker: false,
                 }}
             />
         )
@@ -118,6 +128,6 @@ const mapStateToProps = (state) => ({
     polygonLayers: state.dataReducer.polygonLayers,
 });
 
-const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates};
+const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates, addMyMarker};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditConsole);
