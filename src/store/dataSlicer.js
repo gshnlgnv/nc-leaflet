@@ -1,10 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {kabinets, markers, markersNew} from "./polygons";
+import {kabinets, markersNew} from "./polygons";
 
 const dataReducerSlice = createSlice({
     name: 'dataReducer',
     initialState: {
-        // deviceMarkers: markers,
         myMarkers: markersNew,
         polygonLayers: kabinets,
         currentLayer: null,
@@ -58,6 +57,13 @@ const dataReducerSlice = createSlice({
                     pol.latlngs = action.payload.coord;
                 }
             })
+        },
+        updatingMarkerPosition(state, action) {
+            state.myMarkers.map( marker => {
+                if (marker.superID === action.payload.id) {
+                    marker.latlngs = action.payload.coord;
+                }
+            })
         }
     },
 })
@@ -75,7 +81,8 @@ export const {
     deletePolygon,
     deleteSecondPolygon,
     deleteMarker,
-    editingPolygonCoordinates
+    editingPolygonCoordinates,
+    updatingMarkerPosition
 } = dataReducerSlice.actions;
 
 export default dataReducerSlice.reducer;

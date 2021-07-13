@@ -11,7 +11,7 @@ import {
     deleteMarker,
     deleteSecondPolygon
 } from '../store/dataSlicer';
-import {MapContainer, ImageOverlay, useMap, FeatureGroup, Popup, Marker} from 'react-leaflet';
+import {MapContainer, ImageOverlay, useMap, FeatureGroup, Popup, Marker, Polygon} from 'react-leaflet';
 import {connect} from 'react-redux';
 import {PolygonComponent} from "./Polygon";
 import {mapLayers} from '../store/polygons'
@@ -105,12 +105,13 @@ class MapClass extends React.Component {
         //     popupAnchor: [2, -40]
         // });
 
-        return myMarkers.map( ({mapLocation, latlngs, markerName, icon}, index) => {
+        return myMarkers.map( ({mapLocation, latlngs, markerName, icon, superID}, index) => {
             if (mapLocation === currentLayer) {
                 return(
                     <Marker
                         key={index}
                         position={latlngs}
+                        _superID={superID}
                         // icon={iicon}
                     >
                         <Popup>{markerName}</Popup>
@@ -134,6 +135,8 @@ class MapClass extends React.Component {
 
             return null;
         }
+
+        console.log('mndaksdma', this.props.myMarkers);
 
         return (
             <div className="container">

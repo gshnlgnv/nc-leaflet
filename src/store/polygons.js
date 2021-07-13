@@ -137,12 +137,14 @@ export const markersNew = [
         mapLocation: '1F',
         markerName: "1a",
         latlngs: [18.716980451169885, 33.83789062500001],
+        superID: '1F1a'
     },
     {
         id: "1b",
         mapLocation: '2F',
         markerName: "1b",
         latlngs: [19.132780998205387, 43.33007812500001],
+        superID: '2F1b'
     }
 ];
 

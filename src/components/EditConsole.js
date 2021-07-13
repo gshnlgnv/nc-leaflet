@@ -2,7 +2,14 @@ import React from 'react';
 import {EditControl} from "react-leaflet-draw";
 import {connect} from 'react-redux';
 import L from 'leaflet';
-import { showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates, addMyMarker} from '../store/dataSlicer';
+import {
+    showModal,
+    addPolygonLayer,
+    deleteSecondPolygon,
+    editingPolygonCoordinates,
+    addMyMarker,
+    updatingMarkerPosition
+} from '../store/dataSlicer';
 import {mapLayers} from '../store/polygons';
 
 class EditConsole extends React.Component {
@@ -13,44 +20,63 @@ class EditConsole extends React.Component {
     _onEditStop = (e) => {
         console.log('_onEditStop', e);
 
-       const leafletEditingLayer = e.sourceTarget.attributionControl._attributions;
-       let layerAttribtuteName = '';
+        const leafletEditingLayer = e.sourceTarget.attributionControl._attributions;
+        let layerAttribtuteName = '';
 
-       for (let key in leafletEditingLayer) {
-           layerAttribtuteName = key;
-       }
+        for (let key in leafletEditingLayer) {
+            layerAttribtuteName = key;
+        }
 
-       let floorKey = '';
+        let floorKey = '';
 
-        mapLayers.map( item => {
+        mapLayers.map(item => {
             if (item.attr === layerAttribtuteName) {
                 floorKey = item.floor;
             }
         })
 
-        const {polygonLayers, editingPolygonCoordinates} = this.props;
+        const {polygonLayers, editingPolygonCoordinates, myMarkers, updatingMarkerPosition} = this.props;
+
+        // получаем все доступные слои на карте
         const editedLayers = e.sourceTarget._layers;
+
+        // создаём коллекцию обновлённых элементов "айди элемента: новые координаты"
         let polygonsUpdatedCoordinates = {};
 
         for (let key in editedLayers) {
             if (editedLayers[key].options._superID) {
-                polygonsUpdatedCoordinates[editedLayers[key].options._superID] = editedLayers[key].editing.latlngs[0][0].map( coordinates => {
+
+                // выбираем новый объект полигон или маркер
+                if (editedLayers[key].editing?._marker?._latlng) {
+                    polygonsUpdatedCoordinates[editedLayers[key].options._superID] = [editedLayers[key].editing._marker._latlng.lat, editedLayers[key].editing._marker._latlng.lng];
+                } else {
+                    polygonsUpdatedCoordinates[editedLayers[key].options._superID] = editedLayers[key].editing.latlngs[0][0].map(coordinates => {
                         return [coordinates.lat, coordinates.lng];
                     })
+                }
+            }
+        }
+
+        // пробегаемся по массиву в стейте и меняем на новые координаты, если есть совпадение
+        for (let key in polygonsUpdatedCoordinates) {
+            for (let i = 0; i < polygonLayers.length; i++) {
+                if (polygonLayers[i].superID === key) {
+                    editingPolygonCoordinates({id: polygonLayers[i].superID, coord: polygonsUpdatedCoordinates[key]});
+                }
             }
         }
 
         for (let key in polygonsUpdatedCoordinates) {
-            for (let i = 0 ; i < polygonLayers.length; i++) {
-                if (polygonLayers[i].superID === key) {
-                    editingPolygonCoordinates({id: polygonLayers[i].superID, coord: polygonsUpdatedCoordinates[key]})
+            for (let i = 0; i < myMarkers.length; i++) {
+                if (myMarkers[i].superID === key) {
+                    updatingMarkerPosition({id: myMarkers[i].superID, coord: polygonsUpdatedCoordinates[key]});
                 }
             }
         }
     }
 
     // перехват входящих точек нового полигона
-     coordinatesArray = (incoming) => {
+    coordinatesArray = (incoming) => {
         let result = [];
 
         incoming.map((coord) => {
@@ -61,7 +87,7 @@ class EditConsole extends React.Component {
     }
 
     // конец рисования
-     _onCreated = (e) => {
+    _onCreated = (e) => {
         const {layerType, layer} = e;
         const {currentLayer, polygonName, deleteSecondPolygon, addPolygonLayer} = this.props;
 
@@ -73,7 +99,8 @@ class EditConsole extends React.Component {
                 id: _leaflet_id,
                 mapLocation: currentLayer,
                 markerName: polygonName,
-                latlngs: [layer._latlng.lat, layer._latlng.lng]
+                latlngs: [layer._latlng.lat, layer._latlng.lng],
+                superID: `${currentLayer}${_leaflet_id}`,
             });
         }
 
@@ -94,7 +121,7 @@ class EditConsole extends React.Component {
     }
 
     render() {
-          // names for standart leaflet buttons
+        // names for standart leaflet buttons
         L.drawLocal.draw.toolbar.buttons.polygon = 'Нарисовать полигон';
         L.drawLocal.draw.toolbar.buttons.marker = 'Поставить маркер';
 
@@ -126,8 +153,9 @@ const mapStateToProps = (state) => ({
     showModalWindow: state.dataReducer.showModalWindow,
     polygonName: state.dataReducer.polygonName,
     polygonLayers: state.dataReducer.polygonLayers,
+    myMarkers: state.dataReducer.myMarkers,
 });
 
-const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates, addMyMarker};
+const mapDispatchToProps = {showModal, addPolygonLayer, deleteSecondPolygon, editingPolygonCoordinates, addMyMarker, updatingMarkerPosition};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditConsole);
