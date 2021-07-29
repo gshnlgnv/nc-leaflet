@@ -30,4 +30,58 @@
   align-items: center;
 }
 
+.marker-pin {
+  width: 60px;
+  height: 60px;
+  border-radius: 50% 50% 50% 0;
+  background: #c30b82;
+  position: absolute;
+  transform: rotate(-45deg);
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+}
+
+.marker-pin::after {
+  content: "";
+  width: 50px;
+  height: 50px;
+  margin: 3px 0 0 3px;
+  background: #fff;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.custom-div-icon i {
+  position: absolute;
+  width: 22px;
+  font-size: 15px;
+  left: 0;
+  right: 0;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.wow {
+  width: 15px;
+  height: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+.leaflet-popup-content-wrapper {
+  background-color: #f6ad07;
+}
+
+.leaflet-popup-content {
+  background-color: #c9d4c5;
+  font-size: 15px;
+  font-weight: bold;
+  color: blue;
+}
+
+.leaflet-popup-tip {
+  background-color: #fa0808;
+}
+
 /*# sourceMappingURL=MapClass.css.map */

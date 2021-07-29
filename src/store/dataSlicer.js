@@ -1,19 +1,22 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {kabinets, markersNew} from "./polygons";
+import {kabinets, markers, markersNew} from "./polygons";
+
+const initial = {
+    // myMarkers: markersNew,
+    // myMarkers: markers,
+    polygonLayers: kabinets,
+    currentLayer: null,
+    heatMap: null,
+    markerMovement: false,
+    editConsole: false,
+    showModalWindow: false,
+    polygonName: null,
+    secondPolygonsID: null,
+};
 
 const dataReducerSlice = createSlice({
     name: 'dataReducer',
-    initialState: {
-        myMarkers: markersNew,
-        polygonLayers: kabinets,
-        currentLayer: null,
-        heatMap: null,
-        markerMovement: false,
-        editConsole: false,
-        showModalWindow: false,
-        polygonName: null,
-        secondPolygonsID: null,
-    },
+    initialState: initial,
     reducers: {
         addDeviceMarker(state, action) {
             state.deviceMarkers.filter(item => item.key !== action.payload)
@@ -86,5 +89,3 @@ export const {
 } = dataReducerSlice.actions;
 
 export default dataReducerSlice.reducer;
-
-

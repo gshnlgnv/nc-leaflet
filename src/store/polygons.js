@@ -5,6 +5,42 @@ import exitPNG from '../pics/exit.png';
 import almazov_1 from "../pics/almazov_1.png";
 import almazov_2 from "../pics/almazov_2.png";
 import almazov_3 from "../pics/almazov_3.png";
+import svg_floor_1 from '../pics/floor_1.svg';
+import icon12 from '../pics/icon_temp.svg';
+
+let doubleLinesSVG ="<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 67.62 30.19\"><defs><style>.cls-1{fill:none;stroke:#c8984a;stroke-miterlimit:10;stroke-width:10px;}</style></defs><title>23  </title><span>123</span><line class=\"cls-1\" x1=\"3.72\" y1=\"19.17\" x2=\"34.42\" y2=\"6.36\"/><line class=\"cls-1\" x1=\"30.8\" y1=\"23.78\" x2=\"61.49\" y2=\"10.96\"/></svg>";
+
+let myIconUrl = encodeURI("data:image/svg+xml," + doubleLinesSVG).replace('#','%23');
+
+
+const myCustomColour = '#583470'
+
+const markerHtmlStyles =
+    `
+  background-color: ${myCustomColour};
+  width: 3rem;
+  height: 3rem;
+  display: block;
+  left: -1.5rem;
+  top: -1.5rem;
+  position: relative;
+  border-radius: 3rem 3rem 0;
+  transform: rotate(45deg);
+  border: 1px solid #FFFFFF
+  `
+
+const AAA = new L.icon({
+    // iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
+    // iconURL: myIconUrl,
+    iconUrl: wcPNG,
+    iconSize: [25, 41],
+    // className: "my-custom-pin",
+    iconAnchor: [0, 24],
+    popupAnchor: [0, -36],
+    labelAnchor: [-6, 0],
+    // html: `<span style="${markerHtmlStyles}" />`
+})
+
 
 export const kabinets = [
     {
@@ -98,6 +134,7 @@ const wcICON = new L.icon({
     popupAnchor: [2, -40]
 });
 
+
 export const markers = [
     {
         key: 'marker1',
@@ -108,6 +145,7 @@ export const markers = [
         autoPan: true,
         icon: waterICON,
         title: '1',
+        temprature: '23',
     },
     {
         key: 'marker2',
@@ -118,7 +156,30 @@ export const markers = [
         autoPan: true,
         icon: wcICON,
         title: '2',
+        temprature: '25',
     },
+    {
+        key: 'marker3',
+        floor: '2F',
+        position: [45.927, 60.3396],
+        content: 'device 3',
+        draggable: true,
+        autoPan: true,
+        icon: exitICON,
+        title: '3',
+        temprature: '26',
+    },
+    // {
+    //     key: 'marker4',
+    //     floor: '3F',
+    //     position: [45.927, 60.3396],
+    //     content: 'device 3',
+    //     draggable: true,
+    //     autoPan: true,
+    //     icon: icon123,
+    //     title: '3',
+    //     temprature: '26',
+    // },
     {
         key: 'marker3',
         floor: '3F',
@@ -126,10 +187,12 @@ export const markers = [
         content: 'device 3',
         draggable: true,
         autoPan: true,
-        icon: exitICON,
+        icon: AAA,
         title: '3',
+        temprature: '26',
     },
 ];
+
 
 export const markersNew = [
     {
@@ -164,7 +227,7 @@ export const mapLayers = [
     {
         floor: '3F',
         attr: 'МедЦентр 3 этаж',
-        url: almazov_3,
+        url: svg_floor_1,
         bounds: [[0, 0], [60, 100],]
     }
 ];

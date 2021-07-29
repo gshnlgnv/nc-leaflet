@@ -21,8 +21,6 @@ import MenuTop from "./MenuTop";
 import EditConsole from './EditConsole';
 import {ModalPolygonsDraw} from "./ModalPolygonsDraw";
 import medcentrLogo from '../pics/almazova_logo_text.png';
-import L from "leaflet";
-import wcPNG from "../pics/wc-sign.png";
 
 class MapClass extends React.Component {
     drawHeatMap() {
@@ -86,7 +84,6 @@ class MapClass extends React.Component {
             this.props.deletePolygon(id);
         }
 
-
         return polygonLayers.map(({'id': id, 'superID': superID, 'latlngs': polygons, "roomName": name, "mapLocation": floor}, index) => {
             if (floor === currentLayer) {
                 return <PolygonComponent key={index} polygons={polygons} name={name} id={id} deletePol={deletePol} superID={superID}/>
@@ -105,20 +102,46 @@ class MapClass extends React.Component {
         //     popupAnchor: [2, -40]
         // });
 
-        return myMarkers.map( ({mapLocation, latlngs, markerName, icon, superID}, index) => {
-            if (mapLocation === currentLayer) {
+        return myMarkers.map( ({floor, position, markerName, icon, superID, temprature}, index) => {
+            if (floor === currentLayer) {
+
                 return(
-                    <Marker
-                        key={index}
-                        position={latlngs}
-                        _superID={superID}
-                        // icon={iicon}
-                    >
-                        <Popup>{markerName}</Popup>
-                    </Marker>
+
+                        <Marker
+                            key={index}
+                            position={position}
+                            _superID={superID}
+                            icon={icon}
+                        >
+                            <div stlye={{ height: 30, width: 30, backgroundColor: 'red', position: 'absolute'}}>
+                                <span>{temprature}</span>
+                        </div>
+
+                            <Popup>{markerName}</Popup>
+                        </Marker>
                 )
             }
         });
+    }
+
+    customSVGMarker = () => {
+        let temperatureIndicatorColor = '#49ec1c';
+        let temperatureValueToSVG = 25;
+        let svgToPlace = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.02 38.58"><defs><style>.cls-1{fill:#fff;stroke:#201600;stroke-width:5px;}.cls-1, .cls-2{stroke-miterlimit:10;}.cls-2{fill:${temperatureIndicatorColor};stroke:#fff;} .cls-3{font-size:12px;fill:#52ac62;font-family:OCRAbyBT-Regular, OCR-A BT;}</style></defs><title>Монтажная область 1</title><circle class="cls-1" cx="19.75" cy="19.61" r="15.37"/><circle class="cls-2" cx="32.12" cy="8.19" r="6.49"/><text class="cls-3" transform="translate(11.94 22.21)">${temperatureValueToSVG}</text></svg>`;
+
+        let iconSettingsNew = {
+            mapIconUrl: svgToPlace,
+        };
+
+        let divIconNew  = L.divIcon({
+            className: "leaflet-data-marker",
+            html: L.Util.template(iconSettingsNew.mapIconUrl, iconSettingsNew), //.replace('#','%23'),
+            iconAnchor  : [12, 32],
+            iconSize    : [60, 60],
+            popupAnchor : [0, -28]
+        });
+
+        return divIconNew;
     }
 
     render() {
@@ -135,8 +158,6 @@ class MapClass extends React.Component {
 
             return null;
         }
-
-        console.log('mndaksdma', this.props.myMarkers);
 
         return (
             <div className="container">
@@ -156,14 +177,21 @@ class MapClass extends React.Component {
                         {this.drawHeatMap()}
                         {this.drawPolygons()}
                         {this.drawEditConsole()}
-                        {this.drawMarkers()}
+                        {/*{this.drawMarkers()}*/}
+
+                        <Marker
+                            position={[43.6120170985763, 41.59423828125001]}
+                            icon={this.customSVGMarker()}
+                        >
+                            <Popup>Super Device</Popup>
+                        </Marker>
+
                     </FeatureGroup>
                 </MapContainer>
             </div>
         )
     }
 }
-
 
 const mapStateToProps = (state) => (
     {
