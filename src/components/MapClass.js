@@ -95,13 +95,6 @@ class MapClass extends React.Component {
         const {myMarkers, currentLayer} = this.props;
 
         return myMarkers.map( ({floor, position, markerName, icon, superID, temprature,key}, index) => {
-            let iconA = new L.icon({
-                iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
-                iconSize: [25, 41],
-                iconAnchor: [10, 41],
-                popupAnchor: [2, -40]
-            });
-
             if (floor === currentLayer) {
                 return(
                         <Marker
@@ -171,14 +164,6 @@ class MapClass extends React.Component {
                         {this.drawPolygons()}
                         {this.drawEditConsole()}
                         {this.drawMarkers()}
-
-                        <Marker
-                            position={[43.6120170985763, 41.59423828125001]}
-                            icon={this.customSVGMarker()}
-                        >
-                            <Popup>Super Device</Popup>
-                        </Marker>
-
                     </FeatureGroup>
                 </MapContainer>
             </div>
