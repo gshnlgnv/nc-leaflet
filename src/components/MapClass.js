@@ -94,30 +94,23 @@ class MapClass extends React.Component {
     drawMarkers = () => {
         const {myMarkers, currentLayer} = this.props;
 
-        // const iicon = new L.icon({
-        //     // iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
-        //     iconUrl: wcPNG,
-        //     iconSize: [25, 41],
-        //     iconAnchor: [10, 41],
-        //     popupAnchor: [2, -40]
-        // });
+        return myMarkers.map( ({floor, position, markerName, icon, superID, temprature,key}, index) => {
+            let iconA = new L.icon({
+                iconUrl: "https://unpkg.com/leaflet@1.5.1/dist/images/marker-icon.png",
+                iconSize: [25, 41],
+                iconAnchor: [10, 41],
+                popupAnchor: [2, -40]
+            });
 
-        return myMarkers.map( ({floor, position, markerName, icon, superID, temprature}, index) => {
             if (floor === currentLayer) {
-
                 return(
-
                         <Marker
                             key={index}
                             position={position}
                             _superID={superID}
-                            icon={icon}
+                            icon={this.customSVGMarker()}
                         >
-                            <div stlye={{ height: 30, width: 30, backgroundColor: 'red', position: 'absolute'}}>
-                                <span>{temprature}</span>
-                        </div>
-
-                            <Popup>{markerName}</Popup>
+                            <Popup>{key}</Popup>
                         </Marker>
                 )
             }
@@ -137,7 +130,7 @@ class MapClass extends React.Component {
             className: "leaflet-data-marker",
             html: L.Util.template(iconSettingsNew.mapIconUrl, iconSettingsNew), //.replace('#','%23'),
             iconAnchor  : [12, 32],
-            iconSize    : [60, 60],
+            iconSize    : [33, 33],
             popupAnchor : [0, -28]
         });
 
@@ -177,7 +170,7 @@ class MapClass extends React.Component {
                         {this.drawHeatMap()}
                         {this.drawPolygons()}
                         {this.drawEditConsole()}
-                        {/*{this.drawMarkers()}*/}
+                        {this.drawMarkers()}
 
                         <Marker
                             position={[43.6120170985763, 41.59423828125001]}

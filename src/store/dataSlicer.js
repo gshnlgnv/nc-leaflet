@@ -3,7 +3,7 @@ import {kabinets, markers, markersNew} from "./polygons";
 
 const initial = {
     // myMarkers: markersNew,
-    // myMarkers: markers,
+    myMarkers: markers,
     polygonLayers: kabinets,
     currentLayer: null,
     heatMap: null,
